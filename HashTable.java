@@ -19,7 +19,10 @@ public class HashTable<K, V> implements Map<K, V>{
 	
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
+		table = new ArrayList<LinkedList<MapEntry<K, V>>>();
+		for (int i = 0; i < capacity; i++) {
+		   table.add(new LinkedList<MapEntry<K, V>>());
+		}
 	}
 
 	@Override
@@ -30,7 +33,7 @@ public class HashTable<K, V> implements Map<K, V>{
 
 	@Override
 	public boolean containsValue(V value) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
@@ -48,7 +51,8 @@ public class HashTable<K, V> implements Map<K, V>{
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
+		if (size == 0)
+			return true;
 		return false;
 	}
 
@@ -58,7 +62,7 @@ public class HashTable<K, V> implements Map<K, V>{
 		return null;
 	}
 	
-	private ArrayList<LinkedList<MapEntry<K, V>>> grow() {
+	private void grow() {
 		ArrayList<LinkedList<MapEntry<K, V>>> tempTable = new ArrayList<LinkedList<MapEntry<K, V>>>();
 		capacity *= 2;
 		List<MapEntry<K, V>> entries = this.entries();
@@ -67,14 +71,15 @@ public class HashTable<K, V> implements Map<K, V>{
 			tempTable.add(new LinkedList<MapEntry<K, V>>());
 		}
 		
-		for (int i = 0; i < entries.size(); i++)
+		for (int i = 0; i < entries.size(); i++) {
+			int index = entries.get(i).getKey().hashCode();
+			tempTable.get(index).add(entries.get(i));
+		}
 			
 		table = tempTable;
 	}
 
-	private int hashCode(MapEntry<K, V> entry) {
-		
-	}
+	
 	@Override
 	public V remove(K key) {
 		// TODO Auto-generated method stub
