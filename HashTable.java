@@ -27,20 +27,37 @@ public class HashTable<K, V> implements Map<K, V>{
 
 	@Override
 	public boolean containsKey(K key) {
-		// TODO Auto-generated method stub
+		int index = key.hashCode() % capacity;
+		LinkedList<MapEntry<K, V>> list = table.get(index);
+		for (int i = 0; i < list.size(); i++) {
+			MapEntry<K, V> entry = list.get(i);
+			if (entry.getKey().equals(key))
+				return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean containsValue(V value) {
-		
+		int index = value.hashCode() % capacity;
+		LinkedList<MapEntry<K, V>> list = table.get(index);
+		for (int i = 0; i < list.size(); i++) {
+			MapEntry<K, V> entry = list.get(i);
+			if (entry.getValue().equals(value))
+				return true;
+		}
 		return false;
 	}
 
 	@Override
 	public List<MapEntry<K, V>> entries() {
-		// TODO Auto-generated method stub
-		return null;
+		List<MapEntry<K, V>> entries = new ArrayList<MapEntry<K, V>>(size);
+		for (int i = 0; i < table.size(); i++) {
+			LinkedList<MapEntry<K, V>> list = table.get(i);
+			for (int j = 0; j < list.size(); j++)
+				entries.add(list.get(j));
+		}
+		return entries;
 	}
 
 	@Override
@@ -63,6 +80,7 @@ public class HashTable<K, V> implements Map<K, V>{
 	}
 	
 	private void grow() {
+		// Update lambda
 		ArrayList<LinkedList<MapEntry<K, V>>> tempTable = new ArrayList<LinkedList<MapEntry<K, V>>>();
 		capacity *= 2;
 		List<MapEntry<K, V>> entries = this.entries();
@@ -72,7 +90,7 @@ public class HashTable<K, V> implements Map<K, V>{
 		}
 		
 		for (int i = 0; i < entries.size(); i++) {
-			int index = entries.get(i).getKey().hashCode();
+			int index = entries.get(i).getKey().hashCode() % capacity;
 			tempTable.get(index).add(entries.get(i));
 		}
 			
