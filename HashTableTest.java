@@ -1,3 +1,4 @@
+
 package assign09;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -152,51 +153,47 @@ class HashTableTest {
 		assertEquals(hashStr.size(), 9);
 	}
 	
-	
 	// These test a HashTable with Integer keys and Integer values.
 	
-		@Test
-		void testClearInt() {
-			assertEquals(hashInt.size(), 21);
-			hashInt.clear();
-			assertEquals(hashInt.size(), 0);
-		}
-		
-		@Test
-		void testPutInt() {
-			assertNull(hashInt.put(100, 1));
-			assertEquals(hashInt.size(), 22);
-			assertEquals(hashInt.put(100, 2), 1);
-			assertEquals(hashInt.size(), 22);
-		}
-		
-		@Test
-		void testContainsKeyInt() {
-			assertFalse(hashInt.containsKey(100));
-			assertTrue(hashInt.containsKey(15));
-		}
-		
-		@Test 
-		void testEntriesInt(){
-			List<MapEntry<Integer, Integer>> entries = hashInt.entries();
-			entries = hashInt.entries();
-			assertEquals(entries.size(), 21);
-		}
-		
-		@Test
-		void testGetInt() {
-			assertNull(hashInt.get(100));
-			assertEquals(hashInt.get(15), 15);
-		}
-		
-		@Test
-		void testRemoveInt() {
-			assertNull(hashInt.remove(100));
-			assertEquals(hashInt.size(), 21);
-			assertEquals(hashInt.remove(15), 15);
-			assertEquals(hashInt.size(), 20);
-		}
+	@Test
+	void testClearInt() {
+		assertEquals(hashInt.size(), 21);
+		hashInt.clear();
+		assertEquals(hashInt.size(), 0);
+	}
 	
+	@Test
+	void testPutInt() {
+		assertNull(hashInt.put(100, 1));
+		assertEquals(hashInt.size(), 22);
+		assertEquals(hashInt.put(100, 2), 1);
+		assertEquals(hashInt.size(), 22);
+	}
 	
-
+	@Test
+	void testContainsKeyInt() {
+		assertFalse(hashInt.containsKey(100));
+		assertTrue(hashInt.containsKey(15));
+	}
+	
+	@Test 
+	void testEntriesInt(){
+		List<MapEntry<Integer, Integer>> entries = hashInt.entries();
+		entries = hashInt.entries();
+		assertEquals(entries.size(), 21);
+	}
+	
+	@Test
+	void testGetInt() {
+		assertNull(hashInt.get(100));
+		assertEquals(hashInt.get(15), 15);
+	}
+	
+	@Test
+	void testRemoveInt() {
+		assertNull(hashInt.remove(100));
+		assertEquals(hashInt.size(), 21);
+		assertEquals(hashInt.remove(15), 15);
+		assertEquals(hashInt.size(), 20);
+	}
 }
