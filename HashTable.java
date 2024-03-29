@@ -5,6 +5,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 
+ * @param <K>
+ * @param <V>
+ * 
+ * @author Isabelle Cook and Courtney Carroll
+ * @version March 29, 2024
+ * 
+ */
 public class HashTable<K, V> implements Map<K, V>{
 	private ArrayList<LinkedList<MapEntry<K, V>>> table;
 	private int capacity;
