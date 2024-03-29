@@ -25,7 +25,23 @@ class HashTableTest {
 	@Test
 	void testPutEmpty() {
 		assertNull(emptyHashStr.put("A", 1));
+		assertEquals(emptyHashStr.size(), 1);
 	}
+	
+	@Test
+	void testContainsKey() {
+		assertFalse(emptyHashStr.containsKey("A"));
+		emptyHashStr.put("A", 1);
+		assertTrue(emptyHashStr.containsKey("A"));
+	}
+	
+	@Test
+	void testContainsValue() {
+		assertFalse(emptyHashStr.containsValue(1));
+		emptyHashStr.put("A", 1);
+		assertTrue(emptyHashStr.containsValue(1));
+	}
+	
 	
 	@Test
 	void testIsEmpty() {
@@ -36,6 +52,8 @@ class HashTableTest {
 	void testSizeEmpty() {
 		assertEquals(emptyHashStr.size(), 0);
 	}
+	
+	
 
 }
 
