@@ -11,7 +11,7 @@ public class HashTable<K, V> implements Map<K, V>{
 	private int size;
 	
 	public HashTable() {
-		capacity = 10;
+		capacity = 1;
 		table = new ArrayList<LinkedList<MapEntry<K, V>>>();
 		for (int i = 0; i < capacity; i++) {
 		   table.add(new LinkedList<MapEntry<K, V>>());
@@ -24,6 +24,7 @@ public class HashTable<K, V> implements Map<K, V>{
 		for (int i = 0; i < capacity; i++) {
 		   table.add(new LinkedList<MapEntry<K, V>>());
 		}
+		size = 0;
 	}
 
 	@Override
@@ -133,10 +134,10 @@ public class HashTable<K, V> implements Map<K, V>{
 			V toReturn = entry.getValue();
 			if (entry.getKey().equals(key)) {
 				iter.remove();
+				size--;
 				return toReturn;	
 			}	
 		}
-		size--;
 		return null;	
 	}
 
