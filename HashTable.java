@@ -30,8 +30,9 @@ public class HashTable<K, V> implements Map<K, V>{
 	public boolean containsKey(K key) {
 		int index = key.hashCode() % capacity;
 		LinkedList<MapEntry<K, V>> list = table.get(index);
-		for (int i = 0; i < list.size(); i++) {
-			MapEntry<K, V> entry = list.get(i);
+		Iterator<MapEntry<K, V>> iter = list.iterator();
+		while (iter.hasNext()) {
+			MapEntry<K, V> entry = iter.next();
 			if (entry.getKey().equals(key))
 				return true;
 		}
@@ -40,12 +41,14 @@ public class HashTable<K, V> implements Map<K, V>{
 
 	@Override
 	public boolean containsValue(V value) {
-		int index = value.hashCode() % capacity;
-		LinkedList<MapEntry<K, V>> list = table.get(index);
-		for (int i = 0; i < list.size(); i++) {
-			MapEntry<K, V> entry = list.get(i);
-			if (entry.getValue().equals(value))
-				return true;
+		for (int i = 0; i < table.size(); i++) {
+			LinkedList<MapEntry<K, V>> list = table.get(i);
+			Iterator<MapEntry<K, V>> iter = list.iterator();
+			while (iter.hasNext()) {
+				MapEntry<K, V> entry = iter.next();
+				if (entry.getValue().equals(value))
+					return true;
+			}
 		}
 		return false;
 	}
@@ -55,8 +58,9 @@ public class HashTable<K, V> implements Map<K, V>{
 		List<MapEntry<K, V>> entries = new ArrayList<MapEntry<K, V>>(size);
 		for (int i = 0; i < table.size(); i++) {
 			LinkedList<MapEntry<K, V>> list = table.get(i);
-			for (int j = 0; j < list.size(); j++)
-				entries.add(list.get(j));
+			Iterator<MapEntry<K, V>> iter = list.iterator();
+			while (iter.hasNext())
+				entries.add(iter.next());
 		}
 		return entries;
 	}
