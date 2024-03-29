@@ -1,20 +1,21 @@
 package assign09;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class HashTable<K, V> implements Map<K, V>{
 	private ArrayList<LinkedList<MapEntry<K, V>>> table;
 	private int capacity;
-	private int lambda;
 	private int size;
 	
 	public HashTable() {
+		capacity = 10;
 		table = new ArrayList<LinkedList<MapEntry<K, V>>>();
 		for (int i = 0; i < capacity; i++) {
 		   table.add(new LinkedList<MapEntry<K, V>>());
-		}	
+		}
 	}
 	
 	@Override
@@ -83,24 +84,24 @@ public class HashTable<K, V> implements Map<K, V>{
 	public V put(K key, V value) {
 		int index = key.hashCode() % capacity;
 		LinkedList<MapEntry<K, V>> list = table.get(index);
-		for (int i = 0; i < list.size(); i++) {
-			MapEntry<K, V> entry = list.get(i);
+		Iterator<MapEntry<K, V>> iter = list.iterator();
+		while(iter.hasNext()) {
+			MapEntry<K, V> entry = iter.next();
 			V toReturn = entry.getValue();
-			if (entry.getKey().equals(key))
+			if (entry.getKey().equals(key)) {
 				entry.setValue(value);
 				return toReturn;	
+			}	
 		}
 		list.addFirst(new MapEntry<K,V>(key, value));
 		
 		size++;
-		lambda = size / capacity;
-		if (lambda > 10)
+		if (size / capacity > 10)
 			this.grow();
 		return null;
 	}
 	
 	private void grow() {
-		// Update lambda
 		ArrayList<LinkedList<MapEntry<K, V>>> tempTable = new ArrayList<LinkedList<MapEntry<K, V>>>();
 		capacity *= 2;
 		List<MapEntry<K, V>> entries = this.entries();
@@ -120,8 +121,19 @@ public class HashTable<K, V> implements Map<K, V>{
 	
 	@Override
 	public V remove(K key) {
-		// TODO Auto-generated method stub
-		return null;
+		int index = key.hashCode() % capacity;
+		LinkedList<MapEntry<K, V>> list = table.get(index);
+		Iterator<MapEntry<K, V>> iter = list.iterator();
+		while(iter.hasNext()) {
+			MapEntry<K, V> entry = iter.next();
+			V toReturn = entry.getValue();
+			if (entry.getKey().equals(key)) {
+				iter.remove();
+				return toReturn;	
+			}	
+		}
+		size--;
+		return null;	
 	}
 
 	@Override
