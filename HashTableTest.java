@@ -7,9 +7,16 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
+/**
+ * Class for testing the HashTable class.
+ * @author Isabelle Cook and Courtney Carroll
+ * @version March 29, 2024
+ */
 class HashTableTest {
 	private HashTable<String, Integer> emptyHashStr;
 	private HashTable<String, Integer> hashStr;
+	private HashTable<Integer, Integer> hashInt;
 	
 	@BeforeEach
 	void setUp() throws Exception {
@@ -25,6 +32,11 @@ class HashTableTest {
 		hashStr.put("H", 8);
 		hashStr.put("I", 9);
 		hashStr.put("J", 10);
+		
+		hashInt = new HashTable<Integer, Integer>();
+		for (int i = 0; i < 21; i++) {
+			hashInt.put(i, i);
+		}
 	}
 	
 	// These test an empty HashTable with String keys and Integer Values.
@@ -107,45 +119,83 @@ class HashTableTest {
 	
 	@Test
 	void testPut() {
-		assertNull(emptyHashStr.put("A", 1));
-		assertEquals(emptyHashStr.size(), 1);
-		assertEquals(emptyHashStr.put("A", 2), 1);
-		assertEquals(emptyHashStr.size(), 1);
+		assertNull(hashStr.put("Z", 1));
+		assertEquals(hashStr.size(), 11);
+		assertEquals(hashStr.put("Z", 2), 1);
+		assertEquals(hashStr.size(), 11);
 	}
 	
 	@Test
 	void testContainsKey() {
-		assertFalse(emptyHashStr.containsKey("A"));
-		emptyHashStr.put("A", 1);
-		assertTrue(emptyHashStr.containsKey("A"));
+		assertFalse(hashStr.containsKey("Z"));
+		assertTrue(hashStr.containsKey("A"));
 	}
 	
 	@Test 
 	void testEntries(){
-		List<MapEntry<String, Integer>> entries = emptyHashStr.entries();
-		assertTrue(entries.isEmpty());
-		emptyHashStr.put("A", 1);
-		entries = emptyHashStr.entries();
-		assertEquals(entries.get(0).getKey(), "A");
-		assertEquals(entries.get(0).getValue(), 1);
+		List<MapEntry<String, Integer>> entries = hashStr.entries();
+		entries = hashStr.entries();
+		assertEquals(entries.size(), 10);
 	}
 	
 	@Test
 	void testGet() {
-		assertNull(emptyHashStr.get("A"));
-		emptyHashStr.put("A", 1);
-		assertEquals(emptyHashStr.get("A"), 1);
+		assertNull(hashStr.get("Z"));
+		assertEquals(hashStr.get("A"), 1);
 	}
 	
 	@Test
 	void testRemove() {
-		assertNull(emptyHashStr.remove("A"));
-		emptyHashStr.put("A", 1);
-		assertEquals(emptyHashStr.size(), 1);
-		assertEquals(emptyHashStr.remove("A"), 1);
-		assertEquals(emptyHashStr.size(), 0);
+		assertNull(hashStr.remove("Z"));
+		assertEquals(hashStr.size(), 10);
+		assertEquals(hashStr.remove("A"), 1);
+		assertEquals(hashStr.size(), 9);
 	}
 	
+	
+	// These test a HashTable with Integer keys and Integer values.
+	
+		@Test
+		void testClearInt() {
+			assertEquals(hashInt.size(), 21);
+			hashInt.clear();
+			assertEquals(hashInt.size(), 0);
+		}
+		
+		@Test
+		void testPutInt() {
+			assertNull(hashInt.put(100, 1));
+			assertEquals(hashInt.size(), 22);
+			assertEquals(hashInt.put(100, 2), 1);
+			assertEquals(hashInt.size(), 22);
+		}
+		
+		@Test
+		void testContainsKeyInt() {
+			assertFalse(hashInt.containsKey(100));
+			assertTrue(hashInt.containsKey(15));
+		}
+		
+		@Test 
+		void testEntriesInt(){
+			List<MapEntry<Integer, Integer>> entries = hashInt.entries();
+			entries = hashInt.entries();
+			assertEquals(entries.size(), 21);
+		}
+		
+		@Test
+		void testGetInt() {
+			assertNull(hashInt.get(100));
+			assertEquals(hashInt.get(15), 15);
+		}
+		
+		@Test
+		void testRemoveInt() {
+			assertNull(hashInt.remove(100));
+			assertEquals(hashInt.size(), 21);
+			assertEquals(hashInt.remove(15), 15);
+			assertEquals(hashInt.size(), 20);
+		}
 	
 	
 
