@@ -62,7 +62,13 @@ public class HashTable<K, V> implements Map<K, V>{
 
 	@Override
 	public V get(K key) {
-		// TODO Auto-generated method stub
+		int index = key.hashCode() % capacity;
+		LinkedList<MapEntry<K, V>> list = table.get(index);
+		for (int i = 0; i < list.size(); i++) {
+			MapEntry<K, V> entry = list.get(i);
+			if (entry.getKey().equals(key))
+				return entry.getValue();
+		}
 		return null;
 	}
 
@@ -75,7 +81,21 @@ public class HashTable<K, V> implements Map<K, V>{
 
 	@Override
 	public V put(K key, V value) {
-		// TODO Auto-generated method stub
+		int index = key.hashCode() % capacity;
+		LinkedList<MapEntry<K, V>> list = table.get(index);
+		for (int i = 0; i < list.size(); i++) {
+			MapEntry<K, V> entry = list.get(i);
+			V toReturn = entry.getValue();
+			if (entry.getKey().equals(key))
+				entry.setValue(value);
+				return toReturn;	
+		}
+		list.addFirst(new MapEntry<K,V>(key, value));
+		
+		size++;
+		lambda = size / capacity;
+		if (lambda > 10)
+			this.grow();
 		return null;
 	}
 	
