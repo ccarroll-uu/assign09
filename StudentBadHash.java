@@ -5,13 +5,14 @@ import java.text.DecimalFormat;
 /**
  * This class provides a simple representation for a University of Utah student.
  * Object's hashCode method is overridden with a correct hash function for this
- * object that does a good job of distributing students in a hash
+ * object, but one that does a poor job of distributing students in a hash
  * table.
  * 
  * @author Erin Parker, Isabelle Cook, and Courtney Carroll
  * @version March 29, 2024
  */
-public class StudentGoodHash {
+public class StudentBadHash {
+
 	private int uid;
 	private String firstName;
 	private String lastName;
@@ -23,7 +24,7 @@ public class StudentGoodHash {
 	 * @param firstName
 	 * @param lastName
 	 */
-	public StudentGoodHash(int uid, String firstName, String lastName) {
+	public StudentBadHash(int uid, String firstName, String lastName) {
 		this.uid = uid;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -55,10 +56,10 @@ public class StudentGoodHash {
 	 * @return true if this student and 'other' have the same UID, first name, and last name; false otherwise
 	 */
 	public boolean equals(Object other) {
-		if(!(other instanceof StudentGoodHash))
+		if(!(other instanceof StudentBadHash))
 			return false;
 
-		StudentGoodHash rhs = (StudentGoodHash) other;
+		StudentBadHash rhs = (StudentBadHash) other;
 
 		return this.uid == rhs.uid && this.firstName.equals(rhs.firstName) && this.lastName.equals(rhs.lastName);
 	}
@@ -72,25 +73,13 @@ public class StudentGoodHash {
 	}
 
 	/**
-	 * Generates a hash code based on the summed values of each 
-	 * character in the student's first and last names.
+	 * Generates a hash code based on the first character of the
+	 * student's first name.
 	 * 
 	 * @return integer hash code
 	 */
 	public int hashCode() {
-		int hash = 0;
-		
-		for (int i = 0; i < firstName.length(); i++) {
-			Character letter = firstName.charAt(i);
-			hash = hash + letter.charValue();
-		}
-		
-		for (int i = 0; i < lastName.length(); i++) {
-			Character letter = lastName.charAt(i);
-			hash = hash + letter.charValue();
-		}
-		
-		return hash;
+		Character firstLetter = firstName.charAt(0);
+		return firstLetter.charValue();
 	}
-	
 }
