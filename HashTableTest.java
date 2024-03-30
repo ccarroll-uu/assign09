@@ -221,94 +221,91 @@ class HashTableTest {
 	
 	// These test a HashTable with StudentBadHash keys and Integers values.
 		
-		@Test
-		void testPutBad() {
-			assertNull(hashBad.put(new StudentBadHash(1234, "A", "B"), 1));
-			assertEquals(hashBad.size(), 5);
-			assertEquals(hashBad.put(new StudentBadHash(1234, "A", "B"), 2), 1);
-			assertEquals(hashBad.size(), 5);
-		}
-		
-		@Test
-		void testContainsKeyBad() {
-			assertFalse(hashBad.containsKey(new StudentBadHash(1234, "A", "B")));
-			assertTrue(hashBad.containsKey(new StudentBadHash(1019999, "Alan", "Turing")));
-		}
-		
-		@Test
-		void testGetBad() {
-			assertNull(hashBad.get(new StudentBadHash(1234, "A", "B")));
-			assertEquals(hashBad.get(new StudentBadHash(1019999, "Alan", "Turing")), 1);
-		}
-		
-		@Test
-		void testRemoveBad() {
-			assertNull(hashBad.remove(new StudentBadHash(1234, "A", "B")));
-			assertEquals(hashBad.size(), 4);
-			assertEquals(hashBad.remove(new StudentBadHash(1019999, "Alan", "Turing")), 1);
-			assertEquals(hashBad.size(), 3);
-		}
-		
-		
-		// These test a HashTable with StudentMediumHash keys and Integers values.
-		
-		@Test
-		void testPutMedium() {
-			assertNull(hashMedium.put(new StudentMediumHash(1234, "A", "B"), 1));
-			assertEquals(hashMedium.size(), 5);
-			assertEquals(hashMedium.put(new StudentMediumHash(1234, "A", "B"), 2), 1);
-			assertEquals(hashMedium.size(), 5);
-		}
-				
-		@Test
-		void testContainsKeyMedium() {
-			assertFalse(hashMedium.containsKey(new StudentMediumHash(1234, "A", "B")));
-			assertTrue(hashMedium.containsKey(new StudentMediumHash(1019999, "Alan", "Turing")));
-		}
-				
-		@Test
-		void testGetMedium() {
-			assertNull(hashMedium.get(new StudentMediumHash(1234, "A", "B")));
-			assertEquals(hashMedium.get(new StudentMediumHash(1019999, "Alan", "Turing")), 1);
-		}
-				
-		@Test
-		void testRemoveMedium() {
-			assertNull(hashMedium.remove(new StudentMediumHash(1234, "A", "B")));
-			assertEquals(hashMedium.size(), 4);
-			assertEquals(hashMedium.remove(new StudentMediumHash(1019999, "Alan", "Turing")), 1);
-			assertEquals(hashMedium.size(), 3);
-		}
-		
-		
-		// These test a HashTable with StudentGoodHash keys and Integers values.
+	@Test
+	void testPutBad() {
+		assertNull(hashBad.put(new StudentBadHash(1234, "A", "B"), 1));
+		assertEquals(hashBad.size(), 5);
+		assertEquals(hashBad.put(new StudentBadHash(1234, "A", "B"), 2), 1);
+		assertEquals(hashBad.size(), 5);
+	}
+	
+	@Test
+	void testContainsKeyBad() {
+		assertFalse(hashBad.containsKey(new StudentBadHash(1234, "A", "B")));
+		assertTrue(hashBad.containsKey(new StudentBadHash(1019999, "Alan", "Turing")));
+	}
+	
+	@Test
+	void testGetBad() {
+		assertNull(hashBad.get(new StudentBadHash(1234, "A", "B")));
+		assertEquals(hashBad.get(new StudentBadHash(1019999, "Alan", "Turing")), 1);
+	}
+	
+	@Test
+	void testRemoveBad() {
+		assertNull(hashBad.remove(new StudentBadHash(1234, "A", "B")));
+		assertEquals(hashBad.size(), 4);
+		assertEquals(hashBad.remove(new StudentBadHash(1019999, "Alan", "Turing")), 1);
+		assertEquals(hashBad.size(), 3);
+	}
+	
+	// These test a HashTable with StudentMediumHash keys and Integers values.
+	
+	@Test
+	void testPutMedium() {
+		assertNull(hashMedium.put(new StudentMediumHash(1234, "A", "B"), 1));
+		assertEquals(hashMedium.size(), 5);
+		assertEquals(hashMedium.put(new StudentMediumHash(1234, "A", "B"), 2), 1);
+		assertEquals(hashMedium.size(), 5);
+	}
+			
+	@Test
+	void testContainsKeyMedium() {
+		assertFalse(hashMedium.containsKey(new StudentMediumHash(1234, "A", "B")));
+		assertTrue(hashMedium.containsKey(new StudentMediumHash(1019999, "Alan", "Turing")));
+	}
+			
+	@Test
+	void testGetMedium() {
+		assertNull(hashMedium.get(new StudentMediumHash(1234, "A", "B")));
+		assertEquals(hashMedium.get(new StudentMediumHash(1019999, "Alan", "Turing")), 1);
+	}
+			
+	@Test
+	void testRemoveMedium() {
+		assertNull(hashMedium.remove(new StudentMediumHash(1234, "A", "B")));
+		assertEquals(hashMedium.size(), 4);
+		assertEquals(hashMedium.remove(new StudentMediumHash(1019999, "Alan", "Turing")), 1);
+		assertEquals(hashMedium.size(), 3);
+	}
+	
+	// These test a HashTable with StudentGoodHash keys and Integers values.
 
-		@Test
-		void testPutGood() {
-			assertNull(hashGood.put(new StudentGoodHash(1234, "A", "B"), 1));
-			assertEquals(hashGood.size(), 5);
-			assertEquals(hashGood.put(new StudentGoodHash(1234, "A", "B"), 2), 1);
-			assertEquals(hashGood.size(), 5);
-		}
-				
-		@Test
-		void testContainsKeyGood() {
-			assertFalse(hashGood.containsKey(new StudentGoodHash(1234, "A", "B")));
-			assertTrue(hashGood.containsKey(new StudentGoodHash(1019999, "Alan", "Turing")));
-		}
-				
-		@Test
-		void testGetGood() {
-			assertNull(hashGood.get(new StudentGoodHash(1234, "A", "B")));
-			assertEquals(hashGood.get(new StudentGoodHash(1019999, "Alan", "Turing")), 1);
-		}
-				
-		@Test
-		void testRemoveGood() {
-			assertNull(hashGood.remove(new StudentGoodHash(1234, "A", "B")));
-			assertEquals(hashGood.size(), 4);
-			assertEquals(hashGood.remove(new StudentGoodHash(1019999, "Alan", "Turing")), 1);
-			assertEquals(hashGood.size(), 3);
-		}	
-				
+	@Test
+	void testPutGood() {
+		assertNull(hashGood.put(new StudentGoodHash(1234, "A", "B"), 1));
+		assertEquals(hashGood.size(), 5);
+		assertEquals(hashGood.put(new StudentGoodHash(1234, "A", "B"), 2), 1);
+		assertEquals(hashGood.size(), 5);
+	}
+			
+	@Test
+	void testContainsKeyGood() {
+		assertFalse(hashGood.containsKey(new StudentGoodHash(1234, "A", "B")));
+		assertTrue(hashGood.containsKey(new StudentGoodHash(1019999, "Alan", "Turing")));
+	}
+			
+	@Test
+	void testGetGood() {
+		assertNull(hashGood.get(new StudentGoodHash(1234, "A", "B")));
+		assertEquals(hashGood.get(new StudentGoodHash(1019999, "Alan", "Turing")), 1);
+	}
+			
+	@Test
+	void testRemoveGood() {
+		assertNull(hashGood.remove(new StudentGoodHash(1234, "A", "B")));
+		assertEquals(hashGood.size(), 4);
+		assertEquals(hashGood.remove(new StudentGoodHash(1019999, "Alan", "Turing")), 1);
+		assertEquals(hashGood.size(), 3);
+	}					
 }
