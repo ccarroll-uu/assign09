@@ -72,25 +72,12 @@ public class StudentGoodHash {
 	}
 
 	/**
-	 * Generates a hash code based on the summed values of each 
-	 * character in the student's first and last names.
+	 * Generates a hash code based on the uid of the student.
 	 * 
 	 * @return integer hash code
 	 */
 	public int hashCode() {
-		int hash = 0;
-		
-		for (int i = 0; i < firstName.length(); i++) {
-			Character letter = firstName.charAt(i);
-			hash = hash + letter.charValue();
-		}
-		
-		for (int i = 0; i < lastName.length(); i++) {
-			Character letter = lastName.charAt(i);
-			hash = hash + letter.charValue();
-		}
-		
-		return hash;
+		return uid;
 	}
 	
 }
