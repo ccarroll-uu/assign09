@@ -1,99 +1,230 @@
+
 package assign09;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
- * Abstract class which can be used as a skeleton for perfoming timing tests
- * You provide the problem sizes, number of times to repeat the tests
- * and implementations for setup, the code to be timed, and compensation loop.
- * The run() method will setup, run the code, and report the avg time in NS
- * @Author: Ben Jones
+ * Generic class creates HashTable with MapEntries with keys and values
+ * that utilizes separate chaining for collisions.
+ * 
+ * @param <K> - data type of keys
+ * @param <V> - data type of values
+ * 
+ * @author Isabelle Cook and Courtney Carroll
+ * @version March 29, 2024
  */
-abstract public class TimerTemplate {
+public class HashTable<K, V> implements Map<K, V>{
+	private ArrayList<LinkedList<MapEntry<K, V>>> table;
+	private int capacity;
+	private int size;
+	private int collisions;
+	
+	/**
+	 * Creates an empty HashTable of capacity of one.
+	 */
+	public HashTable() {
+		capacity = 10;
+		table = new ArrayList<LinkedList<MapEntry<K, V>>>(capacity);
+		for (int i = 0; i < capacity; i++) {
+		   table.add(new LinkedList<MapEntry<K, V>>());
+		}
+	}
+	
+	/**
+	 * Clears map entries in table
+	 */
+	@Override
+	public void clear() {
+		table = new ArrayList<LinkedList<MapEntry<K, V>>>();
+		for (int i = 0; i < capacity; i++) {
+		   table.add(new LinkedList<MapEntry<K, V>>());
+		}
+		size = 0;
+	}
 
-    private int[] problemSizes; //what N's should we time?
-    private int timesToLoop; //average the result of many trials
+	/**
+	 * Checks if table contains given key.
+	 * 
+	 * @param key - given key
+	 * @return returns true if table contains key and false otherwise
+	 */
+	@Override
+	public boolean containsKey(K key) {
+		int index = key.hashCode() % capacity;
+		LinkedList<MapEntry<K, V>> list = table.get(index);
+		Iterator<MapEntry<K, V>> iter = list.iterator();
+		// Checking if key exists
+		while (iter.hasNext()) {
+			MapEntry<K, V> entry = iter.next();
+			if (entry.getKey().equals(key))
+				return true;
+		}
+		return false;
+	}
 
-    /**
-     * Create a timer
-     * @param problemSizes array of N's to use
-     * @param timesToLoop number of times to repeat the tests
-     */
-    public TimerTemplate(int[] problemSizes, int timesToLoop){
-        this.problemSizes = problemSizes;
-        this.timesToLoop = timesToLoop;
-    }
+	/**
+	 * Checks if table contains given value.
+	 * 
+	 * @param value - given vale
+	 * @return returns true if table contains value and false otherwise
+	 */
+	@Override
+	public boolean containsValue(V value) {
+		for (int i = 0; i < table.size(); i++) {
+			LinkedList<MapEntry<K, V>> list = table.get(i);
+			Iterator<MapEntry<K, V>> iter = list.iterator();
+			// Checking if value exists
+			while (iter.hasNext()) {
+				MapEntry<K, V> entry = iter.next();
+				if (entry.getValue().equals(value))
+					return true;
+			}
+		}
+		return false;
+	}
 
-    /**
-     * Do any work that needs to be done before your code can be timed
-     * For example, fill in an array with N elements
-     * @param n problem size to be timed
-     */
-    protected abstract void setup(int n);
+	/**
+	 * Creates a list of map entries in table.
+	 * 
+	 * @return list of map entries
+	 */
+	@Override
+	public List<MapEntry<K, V>> entries() {
+		List<MapEntry<K, V>> entries = new ArrayList<MapEntry<K, V>>(size);
+		// Adding entries for table to list
+		for (int i = 0; i < table.size(); i++) {
+			LinkedList<MapEntry<K, V>> list = table.get(i);
+			Iterator<MapEntry<K, V>> iter = list.iterator();
+			while (iter.hasNext())
+				entries.add(iter.next());
+		}
+		return entries;
+	}
 
-    /**
-     * The code to be timed
-     * @param n the problem size to be timed
-     */
-    protected abstract void timingIteration(int n);
+	/**
+	 * Gets value of given key if it is in table.
+	 * 
+	 * @param key - given key
+	 * @return value of given key if it exists in table and null otherwise
+	 */
+	@Override
+	public V get(K key) {
+		int index = key.hashCode() % capacity;
+		LinkedList<MapEntry<K, V>> list = table.get(index);
+		// Checking if value exists
+		for (int i = 0; i < list.size(); i++) {
+			MapEntry<K, V> entry = list.get(i);
+			if (entry.getKey().equals(key))
+				return entry.getValue();
+		}
+		return null;
+	}
 
-    /**
-     * Any extra work done in timingIteration that should be subtracted out
-     * when computing the time of what you actually care about
-     * @param n problem size being timed
-     */
-    protected abstract void compensationIteration(int n);
+	/**
+	 * Checks if table is empty.
+	 * 
+	 * @return true if table is empty and false otherwise
+	 */
+	@Override
+	public boolean isEmpty() {
+		if (size == 0)
+			return true;
+		return false;
+	}
 
+	/**
+	 * Adds map entry with key and value if key does not exist. If key exists,
+	 * the value for that key is overridden.
+	 * 
+	 * @param key - given key
+	 * @param value - given value
+	 * @return original value if key is overridden and null otherwise
+	 */
+	@Override
+	public V put(K key, V value) {
+		int index = key.hashCode() % capacity;
+		LinkedList<MapEntry<K, V>> list = table.get(index);
+		Iterator<MapEntry<K, V>> iter = list.iterator();
+		// Checking if key exists and overriding value
+		while(iter.hasNext()) {
+			MapEntry<K, V> entry = iter.next();
+			V toReturn = entry.getValue();
+			if (entry.getKey().equals(key)) {
+				entry.setValue(value);
+				return toReturn;	
+			}	
+		}
+		// Adding entry if key does not exist
+		list.addFirst(new MapEntry<K,V>(key, value));
+		if(list.size() > 1)
+			collisions++;
+		size++;
+		// Growing backing array if lambda > 10
+		if (size / capacity > 10)
+			this.grow();
+		return null;
+	}
+	
+	public int getCollisions() {
+		return collisions;
+	}
+	
+	/**
+	 * Private method that doubles backing array if lambda > 10.
+	 */
+	private void grow() {
+		// Doubling capacity and storing entries
+		capacity *= 2;
+		ArrayList<LinkedList<MapEntry<K, V>>> tempTable = new ArrayList<LinkedList<MapEntry<K, V>>>(capacity);
+		List<MapEntry<K, V>> entries = this.entries();
+		for (int i = 0; i < capacity; i++) {
+			tempTable.add(new LinkedList<MapEntry<K, V>>());
+		}
+		
+		// Rehashing and inserting entries
+		for (int i = 0; i < entries.size(); i++) {
+			int index = entries.get(i).getKey().hashCode() % capacity;
+			tempTable.get(index).add(entries.get(i));
+		}
+		
+		// Resetting table with new capacity
+		table = tempTable;
+	}
 
-    /**
-     * Store the problem size + runtime together in 1 object
-     * Ignore the "record" stuff", this is basically a class with 2 public members
-     * @param n the problem size
-     * @param avgNanoSecs average time in NS the "timingIteration" code took, in NS
-     */
-    record Result(int n, double avgNanoSecs){} //basically a class with 2 public members
+	/**
+	 * Removes entry with given key from table if it exists.
+	 * 
+	 * @param key - given key
+	 * @return value of key removed and null otherwise
+	 */
+	@Override
+	public V remove(K key) {
+		int index = key.hashCode() % capacity;
+		LinkedList<MapEntry<K, V>> list = table.get(index);
+		Iterator<MapEntry<K, V>> iter = list.iterator();
+		// Checking if key is in table and removing it
+		while(iter.hasNext()) {
+			MapEntry<K, V> entry = iter.next();
+			V toReturn = entry.getValue();
+			if (entry.getKey().equals(key)) {
+				iter.remove();
+				size--;
+				return toReturn;	
+			}	
+		}
+		return null;	
+	}
 
-    /** Time one iteration
-     * @param n problem size
-     * @return average time to run the timing experiment on this problem size
-     */
-    private Result timeIt(int n){
-
-        //implemented in classes inheriting from this
-        setup(n);
-
-        //GC/JIT warm up
-        long startTime = System.nanoTime();
-        while(System.nanoTime() - startTime < 1000000000) { // empty block
-        }
-
-        //actual timing code
-        startTime = System.nanoTime();
-        for(int i = 0; i < timesToLoop; i++){
-            timingIteration(n);
-        }
-        long afterTimedCode = System.nanoTime();
-        //compensation loop
-        for(int i = 0; i < timesToLoop; i++){
-            compensationIteration(n);
-        }
-        long afterCompensationLoop = System.nanoTime();
-        long compensationTime = afterCompensationLoop - afterTimedCode;
-        long totalTimedCodeTime = afterTimedCode - startTime;
-        double averageTime = (double)(totalTimedCodeTime - compensationTime)/timesToLoop;
-        System.out.println(n + ", " + averageTime);
-        return new Result(n, averageTime);
-    }
-
-    /**
-     * Time all problem sizes
-     * @return Array of timing results
-     */
-    Result[] run(){
-        var ret = new Result[problemSizes.length];
-        for(int i = 0; i < problemSizes.length; i++){
-            ret[i] = timeIt(problemSizes[i]);
-        }
-        return ret;
-    }
-
+	/**
+	 * Returns number of entries in table.
+	 * 
+	 * @return number of entries
+	 */
+	@Override
+	public int size() {
+		return size;
+	}
 }
