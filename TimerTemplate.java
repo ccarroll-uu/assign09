@@ -1,103 +1,99 @@
 package assign09;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
-import java.util.TreeSet;
 
-public class StudentHashAnalysis extends TimerTemplate{
-	private HashTable<StudentGoodHash, Integer> hash;
-	
-	private final static int TIMES_TO_LOOP = 1;   
-	private final static int NSTART = 100000;
-	private final static int NINCREMENT = 100000;
-	private final static int NSTEPS = 20;
+/**
+ * Abstract class which can be used as a skeleton for perfoming timing tests
+ * You provide the problem sizes, number of times to repeat the tests
+ * and implementations for setup, the code to be timed, and compensation loop.
+ * The run() method will setup, run the code, and report the avg time in NS
+ * @Author: Ben Jones
+ */
+abstract public class TimerTemplate {
 
-	public StudentHashAnalysis(int[] problemSizes, int timesToLoop) {
-		super(problemSizes, timesToLoop);
-	}
-	
-//	private HashTable<StudentBadHash, Integer> generateHashRandom(int size) {
-//		ArrayList<Integer> list = new ArrayList<Integer>(size);
-//	    BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
-//	    for (int i = 0; i < size; i++) {
-//	    	list.add(i);
-//	    }
-//	    Collections.shuffle(list);
-//	    for (int i = 0; i < size; i++) {
-//	    	bst.add(list.get(i));
-//	    }
-//		return bst;
-//	}
-	private StudentGoodHash generateStudent() {
-		Random rnd = new Random();
-		int uid = rnd.nextInt(10000000);
-		String firstName = generateName();
-		String lastName = generateName();
-		return new StudentGoodHash(uid, firstName, lastName);
-	}
-	
-	private String generateName() {
-		String name = "";
-		Random rnd = new Random();
-		for (int i = 0; i < 5; i++)
-			name += (char)(rnd.nextInt(65, 91));
-		return name;
-	}
-	
+    private int[] problemSizes; //what N's should we time?
+    private int timesToLoop; //average the result of many trials
 
-	@Override
-	protected void setup(int n) {
-		hash = new HashTable<StudentGoodHash, Integer>();
+    /**
+     * Create a timer
+     * @param problemSizes array of N's to use
+     * @param timesToLoop number of times to repeat the tests
+     */
+    public TimerTemplate(int[] problemSizes, int timesToLoop){
+        this.problemSizes = problemSizes;
+        this.timesToLoop = timesToLoop;
+    }
 
-	}
+    /**
+     * Do any work that needs to be done before your code can be timed
+     * For example, fill in an array with N elements
+     * @param n problem size to be timed
+     */
+    protected abstract void setup(int n);
 
-	@Override
-	protected void timingIteration(int n) {
-		for (int i = 0; i < n; i++) {
-			hash.put(generateStudent(), 1);
-		}
-		System.out.print("Collisions: " + hash.getCollisions() + " ,");
-	}
+    /**
+     * The code to be timed
+     * @param n the problem size to be timed
+     */
+    protected abstract void timingIteration(int n);
 
-	@Override
-	protected void compensationIteration(int n) {
-		generateStudent();
-		System.out.print("Collisions: " + hash.getCollisions() + " ,");
-	}
+    /**
+     * Any extra work done in timingIteration that should be subtracted out
+     * when computing the time of what you actually care about
+     * @param n problem size being timed
+     */
+    protected abstract void compensationIteration(int n);
 
-	public static void main(String[] args) {
-		DecimalFormat formatter = new DecimalFormat("00000E00");
 
-		System.out.println("\nN\t|  T(N)/1\tT(N)/logN\tT(N)/N\t\tT(N)/N^2\t\tT(N)/N^3\t\tT(N)/N^4");
-		System.out.println("-----------------------------------------------------------------------------------------------------------------");
-		
-		int[] problemSizes = new int[NSTEPS];
-		problemSizes[0] = NSTART;
-		for(int i = 1; i < NSTEPS; i++)
-			problemSizes[i] = problemSizes[i - 1] + NINCREMENT;
-		
-		StudentHashAnalysis checker = new StudentHashAnalysis(problemSizes, TIMES_TO_LOOP);
-		var results = checker.run();
-		
-		for(var result : results) {
-			int N = result.n();
-			double time = result.avgNanoSecs();
-			System.out.print(N + "\t|  ");
-			
-			System.out.println(formatter.format(time) + "\t" + 
-					formatter.format(time / (Math.log10(N) / Math.log10(2))) + "\t" + 
-					formatter.format(time / N) + "\t" + 
-					formatter.format((time / N) / N));
-					formatter.format(((time / N) / N) / N);
-					formatter.format((((time / N) / N) / N) / N);
-		}	
-		
-		for(var result : results) {
-			double time = result.avgNanoSecs();
-			System.out.print(time + ", ");
-		}	
-	}
+    /**
+     * Store the problem size + runtime together in 1 object
+     * Ignore the "record" stuff", this is basically a class with 2 public members
+     * @param n the problem size
+     * @param avgNanoSecs average time in NS the "timingIteration" code took, in NS
+     */
+    record Result(int n, double avgNanoSecs){} //basically a class with 2 public members
+
+    /** Time one iteration
+     * @param n problem size
+     * @return average time to run the timing experiment on this problem size
+     */
+    private Result timeIt(int n){
+
+        //implemented in classes inheriting from this
+        setup(n);
+
+        //GC/JIT warm up
+        long startTime = System.nanoTime();
+        while(System.nanoTime() - startTime < 1000000000) { // empty block
+        }
+
+        //actual timing code
+        startTime = System.nanoTime();
+        for(int i = 0; i < timesToLoop; i++){
+            timingIteration(n);
+        }
+        long afterTimedCode = System.nanoTime();
+        //compensation loop
+        for(int i = 0; i < timesToLoop; i++){
+            compensationIteration(n);
+        }
+        long afterCompensationLoop = System.nanoTime();
+        long compensationTime = afterCompensationLoop - afterTimedCode;
+        long totalTimedCodeTime = afterTimedCode - startTime;
+        double averageTime = (double)(totalTimedCodeTime - compensationTime)/timesToLoop;
+        System.out.println(n + ", " + averageTime);
+        return new Result(n, averageTime);
+    }
+
+    /**
+     * Time all problem sizes
+     * @return Array of timing results
+     */
+    Result[] run(){
+        var ret = new Result[problemSizes.length];
+        for(int i = 0; i < problemSizes.length; i++){
+            ret[i] = timeIt(problemSizes[i]);
+        }
+        return ret;
+    }
+
 }
-
