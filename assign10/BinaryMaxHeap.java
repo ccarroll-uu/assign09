@@ -219,6 +219,9 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 		return false;
 	}
 
+	/**
+	 * Empties heap.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void clear() {
@@ -226,6 +229,12 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 		size = 0;
 	}
 
+	/**
+	 * Returns an Object array of the items in the heap, ordered in the
+	 * same way as they are in the backing array.
+	 * 
+	 * @return Object array of heap items
+	 */
 	@Override
 	public Object[] toArray() {
 		Object[] outArr = new Object[size];
