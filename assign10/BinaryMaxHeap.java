@@ -6,11 +6,24 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+
+/**
+ * This class builds a binary max heap.
+ * 
+ * @param <E> - type of item to be stored in heap
+ * 
+ * @author Isabelle Cook and Courtney Carroll
+ * @version April 4, 2024
+ */
 public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 	private E[] arr;
 	private int size;
 	private Comparator<? super E> cmp;
 	
+	/**
+	 * Constructor for an empty binary max heap of size 10. Items are
+	 * sorted using natural ordering.
+	 */
 	@SuppressWarnings("unchecked")
 	public BinaryMaxHeap() {
 		arr = (E[]) new Object[10];
@@ -51,21 +64,23 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 		E temp = arr[i];
 		while(cmp.compare(temp, arr[(i+1)/2 - 1]) < 0) {
 			if(cmp.compare(arr[i], arr[(i+1)/2 - 1]) > 0) {
-				swap(arr, i, (i+1)/2 - 1, temp);
+				swap(arr, i, (i+1)/2 - 1);
+				i = (i+1)/2 - 1;
 			}
 		}
 	}
 	
 	private void percolateDown(E[] arr, int i, int size) {
-		E temp = arr[i];
 		while(2*i+2 < size) {
 			if(cmp.compare(arr[i], arr[2*i+1]) < 0) {
-				swap(arr, i, 2*i+1, temp);
+				swap(arr, i, 2*i+1);
+				i = 2*i+1;
 //				arr[i] = arr[2*i+1];
 //				arr[2*i+1] = temp;
 			}
 			else {
-				swap(arr, i, 2*i+2, temp);
+				swap(arr, i, 2*i+2);
+				i = 2*i+2;
 //				arr[i] = arr[2*i+2];
 //				arr[2*i+2] = temp;
 			}
@@ -82,27 +97,37 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 		}
 	}
 	
-	private void swap(E[] arr, int i1, int i2, E temp) {
+	private void swap(E[] arr, int i1, int i2) {
+		E temp = arr[i1];
 		arr[i1] = arr[i2];
 		arr[i2] = temp;
 	}
 	
 	@Override
 	public void add(E item) {
-		// TODO Auto-generated method stub
-		
+		arr[size] = item;
+		percolateUp(arr, size, size);
+		size++;
 	}
 
 	@Override
 	public E peek() throws NoSuchElementException {
-		// TODO Auto-generated method stub
-		return null;
+		if (size == 0)
+			throw new NoSuchElementException();
+		return arr[0];
 	}
 
 	@Override
 	public E extractMax() throws NoSuchElementException {
-		// TODO Auto-generated method stub
-		return null;
+		if (size == 0)
+			throw new NoSuchElementException();
+		
+		swap(arr, 0, size - 1);
+		percolateDown(arr, 0, size);
+		E temp = arr[size - 1];
+		arr[size - 1] = null;
+		size--;
+		return temp;
 	}
 
 	@Override
@@ -112,20 +137,25 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
+		if (size == 0)
+			return true;
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		arr = (E[]) new Object[size];
+		size = 0;
 	}
 
 	@Override
 	public Object[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
+		Object[] outArr = new Object[size];
+		for (int i = 0; i < size; i++)
+			outArr[i] = arr[i];
+		return outArr;
 	}
 
 }
+
