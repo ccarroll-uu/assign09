@@ -31,6 +31,12 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 		innerCompare(null);
 	}
 	
+	/**
+	 * Constructor for an empty binary max heap of size 10. Items are
+	 * sorted using comparator specified ordering.
+	 * 
+	 * @param cmp - given comparator
+	 */
 	@SuppressWarnings("unchecked")
 	public BinaryMaxHeap(Comparator<? super E> cmp) {
 		arr = (E[]) new Object[10];
@@ -38,29 +44,54 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 		innerCompare(cmp);
 	}
 
+	/**
+	 * Constructor for binary max heap of items in list. Items are
+	 * sorted using natural ordering.
+	 * 
+	 * @param list - given list
+	 */
 	public BinaryMaxHeap(List<? extends E> list) {
 		buildHeap(list);
 		size = list.size();
 		innerCompare(null);
 	}
 	
+	/**
+	 * Constructor for binary max heap of items in list. Items are
+	 * sorted using comparator specified ordering.
+	 * 
+	 * @param list - given list
+	 * @param cmp - given comparator
+	 */
 	public BinaryMaxHeap(List<? extends E> list, Comparator<? super E> cmp) {
 		buildHeap(list);
 		size = list.size();
 		innerCompare(cmp);
 	}
 	
+	/**
+	 * Private method that builds binary max heap backing array using given list.
+	 * 
+	 * @param list - given list
+	 */
 	@SuppressWarnings("unchecked")
 	private void buildHeap(List<? extends E> list) {
 		arr = (E[]) new Object[list.size()];
 		Iterator<? extends E> iter = list.iterator();
 		for(int i = 0; i < list.size(); i++)
 			arr[i] = iter.next();
-		for (int i = (arr.length-1)/2; i > 0; i--)
-			percolateDown(arr, i, arr.length);
+		for (int i = (list.size()-1)/2; i > 0; i--)
+			percolateDown(arr, i);
 	}
 	
-	private void percolateUp(E[] arr, int i, int size) {
+	/**
+	 * Private method that moves item through heap to satisfy
+	 * heap order property.
+	 * 
+	 * @param arr - backing array
+	 * @param i - index of item in heap
+	 */
+	private void percolateUp(E[] arr, int i) {
 		E temp = arr[i];
 		while(cmp.compare(temp, arr[(i+1)/2 - 1]) < 0) {
 			if(cmp.compare(arr[i], arr[(i+1)/2 - 1]) > 0) {
@@ -70,7 +101,14 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 		}
 	}
 	
-	private void percolateDown(E[] arr, int i, int size) {
+	/**
+	 * Private method that moves item through heap to satisfy
+	 * heap order property.
+	 * 
+	 * @param arr - backing array
+	 * @param i - index of item in heap
+	 */
+	private void percolateDown(E[] arr, int i) {
 		while(2*i+2 < size) {
 			if(cmp.compare(arr[i], arr[2*i+1]) < 0) {
 				swap(arr, i, 2*i+1);
@@ -87,6 +125,11 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 		}
 	}
 	
+	/**
+	 * Private method that determines whether Comparable or Comparator is used.
+	 * 
+	 * @param cmp - given comparator
+	 */
 	@SuppressWarnings("unchecked")
 	private void innerCompare(Comparator<? super E> cmp) {
 		if (cmp == null) {
@@ -97,19 +140,37 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 		}
 	}
 	
+	/**
+	 * Private method that swaps two items in array.
+	 * 
+	 * @param arr - given array
+	 * @param i1 - index of first item
+	 * @param i2 - index of second item
+	 */
 	private void swap(E[] arr, int i1, int i2) {
 		E temp = arr[i1];
 		arr[i1] = arr[i2];
 		arr[i2] = temp;
 	}
 	
+	/**
+	 * Adds item to heap in correct position.
+	 * 
+	 * @param item - given item
+	 */
 	@Override
 	public void add(E item) {
 		arr[size] = item;
-		percolateUp(arr, size, size);
+		percolateUp(arr, size);
 		size++;
 	}
 
+	/**
+	 * Returns max item of heap.
+	 * 
+	 * @return max item
+	 * @throws NoSuchElementException if heap is empty
+	 */
 	@Override
 	public E peek() throws NoSuchElementException {
 		if (size == 0)
@@ -117,24 +178,40 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 		return arr[0];
 	}
 
+	/**
+	 * Returns and deletes max item of heap.
+	 * 
+	 * @return max item 
+	 * @throws NoSuchElementException if heap is empty
+	 */
 	@Override
 	public E extractMax() throws NoSuchElementException {
 		if (size == 0)
 			throw new NoSuchElementException();
 		
 		swap(arr, 0, size - 1);
-		percolateDown(arr, 0, size);
+		percolateDown(arr, 0);
 		E temp = arr[size - 1];
 		arr[size - 1] = null;
 		size--;
 		return temp;
 	}
 
+	/**
+	 * Returns number of items in heap.
+	 * 
+	 * @returns number of items
+	 */
 	@Override
 	public int size() {
 		return size;
 	}
 
+	/**
+	 * Determines if heap is empty.
+	 * 
+	 * @returns true if heap is empty and false otherwise
+	 */
 	@Override
 	public boolean isEmpty() {
 		if (size == 0)
@@ -158,4 +235,3 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 	}
 
 }
-
