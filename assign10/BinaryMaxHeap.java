@@ -1,3 +1,4 @@
+
 package assign10;
 
 import java.util.Comparator;
@@ -27,7 +28,7 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 	public BinaryMaxHeap(List<? extends E> list) {
 		buildHeap(list);
 		size = list.size();
-		innerCompare(cmp);
+		innerCompare(null);
 	}
 	
 	public BinaryMaxHeap(List<? extends E> list, Comparator<? super E> cmp) {
@@ -46,16 +47,29 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 			percolateDown(arr, i, arr.length);
 	}
 	
-	private void percolateUp() {
-		
+	private void percolateUp(E[] arr, int i, int size) {
+		E temp = arr[i];
+		while(cmp.compare(temp, arr[(i+1)/2 - 1]) < 0) {
+			if(cmp.compare(arr[i], arr[(i+1)/2 - 1]) > 0) {
+				swap(arr, i, (i+1)/2 - 1, temp);
+			}
+		}
 	}
 	
-	private void percolateDown(E[] arr, int index, int size) {
-		E temp = arr[size - 1];
-		arr[size - 1] = arr[0];
-		arr[0] = temp;
-		
-		
+	private void percolateDown(E[] arr, int i, int size) {
+		E temp = arr[i];
+		while(2*i+2 < size) {
+			if(cmp.compare(arr[i], arr[2*i+1]) < 0) {
+				swap(arr, i, 2*i+1, temp);
+//				arr[i] = arr[2*i+1];
+//				arr[2*i+1] = temp;
+			}
+			else {
+				swap(arr, i, 2*i+2, temp);
+//				arr[i] = arr[2*i+2];
+//				arr[2*i+2] = temp;
+			}
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -66,6 +80,11 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 		else {
 			this.cmp = cmp;	
 		}
+	}
+	
+	private void swap(E[] arr, int i1, int i2, E temp) {
+		arr[i1] = arr[i2];
+		arr[i2] = temp;
 	}
 	
 	@Override
@@ -110,4 +129,3 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 	}
 
 }
-
