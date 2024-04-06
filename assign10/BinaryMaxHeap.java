@@ -92,12 +92,9 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 	 * @param i - index of item in heap
 	 */
 	private void percolateUp(E[] arr, int i) {
-		E temp = arr[i];
-		while(cmp.compare(temp, arr[(i+1)/2 - 1]) < 0) {
-			if(cmp.compare(arr[i], arr[(i+1)/2 - 1]) > 0) {
-				swap(arr, i, (i+1)/2 - 1);
-				i = (i+1)/2 - 1;
-			}
+		while(i != 0 &&  cmp.compare(arr[(i+1)/2 - 1], arr[i]) < 0) {
+			swap(arr, i, (i+1)/2 - 1);
+			i = (i+1)/2 - 1;
 		}
 	}
 	
