@@ -1,4 +1,3 @@
-
 package assign10;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -167,6 +166,14 @@ class BinaryMaxHeapTest {
 		assertEquals(list[2], "cat");
 		assertEquals(list[3], "apple");
 		assertEquals(list[4], "banana");
+		
+		assertEquals(heap3.extractMax(), "elephant");
+		assertEquals(heap3.size(), 4);
+		list = heap3.toArray();
+		assertEquals(list[0], "dog");
+		assertEquals(list[1], "banana");
+		assertEquals(list[2], "cat");
+		assertEquals(list[3], "apple");
 	}
 	
 	@Test
@@ -201,4 +208,3 @@ class BinaryMaxHeapTest {
 	
 	
 }
-
