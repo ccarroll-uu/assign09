@@ -33,12 +33,12 @@ class FindKLargestTest {
 	}
 	
 	@Test
-	void testFindKLargestHeapEmtpy() {
+	void testFindKLargestHeapEmpty() {
 		List<String> kLargest = FindKLargest.findKLargestHeap(listEmpty, 0);
 		assertTrue(kLargest.isEmpty());
 		listEmpty.add("purple");
 		kLargest = FindKLargest.findKLargestHeap(listEmpty, 1);
-		assertEquals(kLargest.get(1), "purple");
+		assertEquals(kLargest.get(0), "purple");
 		
 	}
 	
