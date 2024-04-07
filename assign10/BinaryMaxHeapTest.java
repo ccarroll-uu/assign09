@@ -4,13 +4,19 @@ package assign10;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
+/**
+ * This class tests the BinaryMaxHeap class.
+ * 
+ * @author Isabelle Cook, Courtney Carroll
+ * @version April 6, 2024
+ */
 class BinaryMaxHeapTest {
 	BinaryMaxHeap<String> heap1;
 	BinaryMaxHeap<String> heap2;
@@ -32,6 +38,53 @@ class BinaryMaxHeapTest {
 		heap2 = new BinaryMaxHeap<String>(cmp);
 		heap3 = new BinaryMaxHeap<String>(list);
 		heap4 = new BinaryMaxHeap<String>(list, cmp);
+	}
+	
+	@Test
+	void testSize() {
+		assertEquals(heap1.size(), 0);
+		assertEquals(heap2.size(), 0);
+		assertEquals(heap3.size(), 6);
+		assertEquals(heap4.size(), 6);
+	}
+	
+	@Test
+	void testPeekException() {
+		assertThrows(NoSuchElementException.class, () -> heap1.peek());
+		assertThrows(NoSuchElementException.class, () -> heap2.peek());
+	}
+	
+	@Test
+	void testPeek() {
+		assertEquals(heap3.peek(), "fox");
+		assertEquals(heap4.peek(), "elephant");
+	}
+	
+	@Test
+	void testToArrayEmpty() {
+		assertEquals(heap1.toArray().length, 0);
+		assertEquals(heap2.toArray().length, 0);
+	}
+	
+	@Test
+	void testToArray() {
+		assertEquals(heap3.size(), 6);
+		Object[] list = heap3.toArray();
+		assertEquals(list[0], "fox");
+		assertEquals(list[1], "elephant");
+		assertEquals(list[2], "cat");
+		assertEquals(list[3], "dog");
+		assertEquals(list[4], "banana");
+		assertEquals(list[5], "apple");
+		
+		assertEquals(heap4.size(), 6);
+		list = heap4.toArray();
+		assertEquals(list[0], "elephant");
+		assertEquals(list[1], "banana");
+		assertEquals(list[2], "fox");
+		assertEquals(list[3], "dog");
+		assertEquals(list[4], "apple");
+		assertEquals(list[5], "cat");
 	}
 
 	@Test
@@ -58,18 +111,9 @@ class BinaryMaxHeapTest {
 	
 	@Test
 	void testAdd() {
-		assertEquals(heap3.size(), 6);
-		Object[] list = heap3.toArray();
-		assertEquals(list[0], "fox");
-		assertEquals(list[1], "elephant");
-		assertEquals(list[2], "cat");
-		assertEquals(list[3], "dog");
-		assertEquals(list[4], "banana");
-		assertEquals(list[5], "apple");
-		
 		heap3.add("purple");
 		assertEquals(heap3.size(), 7);
-		list = heap3.toArray();
+		Object[] list = heap3.toArray();
 		assertEquals(list[0], "purple");
 		assertEquals(list[1], "elephant");
 		assertEquals(list[2], "fox");
@@ -82,18 +126,9 @@ class BinaryMaxHeapTest {
 	
 	@Test
 	void testAddCmp() {
-		assertEquals(heap4.size(), 6);
-		Object[] list = heap4.toArray();
-		assertEquals(list[0], "elephant");
-		assertEquals(list[1], "banana");
-		assertEquals(list[2], "fox");
-		assertEquals(list[3], "dog");
-		assertEquals(list[4], "apple");
-		assertEquals(list[5], "cat");
-		
 		heap4.add("purple");
 		assertEquals(heap4.size(), 7);
-		list = heap4.toArray();
+		Object[] list = heap4.toArray();
 		assertEquals(list[0], "elephant");
 		assertEquals(list[1], "banana");
 		assertEquals(list[2], "purple");
@@ -101,18 +136,6 @@ class BinaryMaxHeapTest {
 		assertEquals(list[4], "apple");
 		assertEquals(list[5], "cat");
 		assertEquals(list[6], "fox");
-	}
-
-	@Test
-	void testPeekException() {
-		assertThrows(NoSuchElementException.class, () -> heap1.peek());
-		assertThrows(NoSuchElementException.class, () -> heap2.peek());
-	}
-	
-	@Test
-	void testPeek() {
-		assertEquals(heap3.peek(), "fox");
-		assertEquals(heap4.peek(), "elephant");
 	}
 	
 	@Test
@@ -159,10 +182,23 @@ class BinaryMaxHeapTest {
 	}
 	
 	@Test
-	void testSize() {
-		assertEquals(heap1.size(), 0);
-		assertEquals(heap2.size(), 0);
-		assertEquals(heap3.size(), 6);
-		assertEquals(heap4.size(), 6);
+	void testIsEmptyTrue() {
+		assertTrue(heap1.isEmpty());
+		assertTrue(heap2.isEmpty());
 	}
+	
+	@Test
+	void testIsEmptyFalse() {
+		assertFalse(heap3.isEmpty());
+		assertFalse(heap4.isEmpty());
+	}
+	
+	@Test
+	void testClear() {
+		heap3.clear();
+		assertTrue(heap3.isEmpty());
+	}
+	
+	
 }
+
