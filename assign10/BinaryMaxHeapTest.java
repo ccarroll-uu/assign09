@@ -58,13 +58,23 @@ class BinaryMaxHeapTest {
 	void testAdd() {
 		assertEquals(heap3.size(), 6);
 		Object[] list = heap3.toArray();
-		System.out.print(Arrays.toString(list));
 		assertEquals(list[0], "fox");
-		assertEquals(list[1], "dog");
-		assertEquals(list[2], "elephant");
-		assertEquals(list[3], "apple");
-		assertEquals(list[4], "cat");
-		assertEquals(list[5], "banana");
+		assertEquals(list[1], "elephant");
+		assertEquals(list[2], "cat");
+		assertEquals(list[3], "dog");
+		assertEquals(list[4], "banana");
+		assertEquals(list[5], "apple");
+		
+		heap3.add("purple");
+		assertEquals(heap3.size(), 7);
+		list = heap3.toArray();
+		assertEquals(list[0], "purple");
+		assertEquals(list[1], "elephant");
+		assertEquals(list[2], "fox");
+		assertEquals(list[3], "dog");
+		assertEquals(list[4], "banana");
+		assertEquals(list[5], "apple");
+		assertEquals(list[6], "cat");
 		
 	}
 
