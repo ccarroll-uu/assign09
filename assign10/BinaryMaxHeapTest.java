@@ -1,3 +1,4 @@
+
 package assign10;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -5,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -101,4 +103,66 @@ class BinaryMaxHeapTest {
 		assertEquals(list[6], "fox");
 	}
 
+	@Test
+	void testPeekException() {
+		assertThrows(NoSuchElementException.class, () -> heap1.peek());
+		assertThrows(NoSuchElementException.class, () -> heap2.peek());
+	}
+	
+	@Test
+	void testPeek() {
+		assertEquals(heap3.peek(), "fox");
+		assertEquals(heap4.peek(), "elephant");
+	}
+	
+	@Test
+	void testExtractMaxException() {
+		assertThrows(NoSuchElementException.class, () -> heap1.extractMax());
+		assertThrows(NoSuchElementException.class, () -> heap2.extractMax());
+	}
+	
+	@Test
+	void testExtractMaxEmpty() {
+		assertTrue(heap1.size() == 0);
+		heap1.add("candy");
+		assertEquals(heap1.extractMax(), "candy");
+		assertTrue(heap1.size() == 0);
+		
+		assertTrue(heap2.size() == 0);
+		heap2.add("blue");
+		assertEquals(heap2.extractMax(), "blue");
+		assertTrue(heap2.size() == 0);
+	}
+	
+	@Test
+	void testExtractMax() {
+		assertEquals(heap3.extractMax(), "fox");
+		assertEquals(heap3.size(), 5);
+		Object[] list = heap3.toArray();
+		assertEquals(list[0], "elephant");
+		assertEquals(list[1], "dog");
+		assertEquals(list[2], "cat");
+		assertEquals(list[3], "apple");
+		assertEquals(list[4], "banana");
+	}
+	
+	@Test
+	void testExtractMaxCmp() {
+		assertEquals(heap4.extractMax(), "elephant");
+		assertEquals(heap4.size(), 5);
+		Object[] list = heap4.toArray();
+		assertEquals(list[0], "banana");
+		assertEquals(list[1], "apple");
+		assertEquals(list[2], "fox");
+		assertEquals(list[3], "dog");
+		assertEquals(list[4], "cat");
+	}
+	
+	@Test
+	void testSize() {
+		assertEquals(heap1.size(), 0);
+		assertEquals(heap2.size(), 0);
+		assertEquals(heap3.size(), 6);
+		assertEquals(heap4.size(), 6);
+	}
 }
