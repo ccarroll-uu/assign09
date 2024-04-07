@@ -77,5 +77,28 @@ class BinaryMaxHeapTest {
 		assertEquals(list[6], "cat");
 		
 	}
+	
+	@Test
+	void testAddCmp() {
+		assertEquals(heap4.size(), 6);
+		Object[] list = heap4.toArray();
+		assertEquals(list[0], "elephant");
+		assertEquals(list[1], "banana");
+		assertEquals(list[2], "fox");
+		assertEquals(list[3], "dog");
+		assertEquals(list[4], "apple");
+		assertEquals(list[5], "cat");
+		
+		heap4.add("purple");
+		assertEquals(heap4.size(), 7);
+		list = heap4.toArray();
+		assertEquals(list[0], "elephant");
+		assertEquals(list[1], "banana");
+		assertEquals(list[2], "purple");
+		assertEquals(list[3], "dog");
+		assertEquals(list[4], "apple");
+		assertEquals(list[5], "cat");
+		assertEquals(list[6], "fox");
+	}
 
 }
