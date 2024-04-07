@@ -1,4 +1,3 @@
-
 package assign10;
 
 import java.util.Comparator;
@@ -151,12 +150,27 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 	}
 	
 	/**
+	 * Doubles the size of the backing array.
+	 */
+	@SuppressWarnings("unchecked")
+	private void grow() {
+		E[] arr2 = (E[]) new Object[size*2];
+		for(int i = 0; i < size; i++) {
+			arr2[i] = arr[i];
+		}
+		arr = arr2;
+	}
+	
+	/**
 	 * Adds item to heap in correct position.
 	 * 
 	 * @param item - given item
 	 */
 	@Override
 	public void add(E item) {
+		if (arr.length == size) {
+			grow();
+		}
 		arr[size] = item;
 		percolateUp(arr, size);
 		size++;
