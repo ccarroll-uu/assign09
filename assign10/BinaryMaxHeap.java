@@ -1,3 +1,4 @@
+
 package assign10;
 
 import java.util.Comparator;
@@ -253,5 +254,4 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 			outArr[i] = arr[i];
 		return outArr;
 	}
-
 }
