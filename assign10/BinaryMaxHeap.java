@@ -1,4 +1,3 @@
-
 package assign10;
 
 import java.util.Comparator;
@@ -202,10 +201,10 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 			throw new NoSuchElementException();
 		
 		swap(arr, 0, size - 1);
-		percolateDown(arr, 0);
 		E temp = arr[size - 1];
 		arr[size - 1] = null;
 		size--;
+		percolateDown(arr, 0);
 		return temp;
 	}
 
