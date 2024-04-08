@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
  * @param <E> - type of item to be stored in heap
  * 
  * @author Isabelle Cook and Courtney Carroll
- * @version April 4, 2024
+ * @version April 8, 2024
  */
 public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 	private E[] arr;
@@ -91,7 +91,7 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 	 * @param i - index of item in heap
 	 */
 	private void percolateUp(E[] arr, int i) {
-		while(i != 0 &&  cmp.compare(arr[(i+1)/2 - 1], arr[i]) < 0) {
+		while(i > 0 && cmp.compare(arr[(i+1)/2 - 1], arr[i]) < 0) {
 			swap(arr, i, (i+1)/2 - 1);
 			i = (i+1)/2 - 1;
 		}
@@ -107,17 +107,20 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 	private void percolateDown(E[] arr, int i) {
 		while(2*i+1 < size || 2*i+2 < size) {
 			if (2*i + 2 >= size) {
-				swap(arr, i, 2*i+1);
-				i = 2*i+2;
+				if (cmp.compare(arr[i], arr[2*i+1]) < 0)
+					swap(arr, i, 2*i+1);
+				i = 2*i+1;
 			}
-			else if (cmp.compare(arr[2*i+1], arr[2*i+2]) < 0) {
+			else if (cmp.compare(arr[i], arr[2*i+2]) < 0 && cmp.compare(arr[2*i+1], arr[2*i+2]) < 0) {
 				swap(arr, i, 2*i+2);
 				i = 2*i+2;
 			}
-			else {
+			else if (cmp.compare(arr[i], arr[2*i+1]) < 0) {
 				swap(arr, i, 2*i+1);
 				i = 2*i+1;
 			} 
+			else
+				break;
 		}
 	}
 	
@@ -236,7 +239,7 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E>{
 	@SuppressWarnings("unchecked")
 	@Override
 	public void clear() {
-		arr = (E[]) new Object[size];
+		arr = (E[]) new Object[10];
 		size = 0;
 	}
 
