@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
  * This class tests the BinaryMaxHeap class.
  * 
  * @author Isabelle Cook, Courtney Carroll
- * @version April 6, 2024
+ * @version April 8, 2024
  */
 class BinaryMaxHeapTest {
 	BinaryMaxHeap<String> heap1;
@@ -80,10 +80,10 @@ class BinaryMaxHeapTest {
 		list = heap4.toArray();
 		assertEquals(list[0], "elephant");
 		assertEquals(list[1], "banana");
-		assertEquals(list[2], "fox");
+		assertEquals(list[2], "cat");
 		assertEquals(list[3], "dog");
 		assertEquals(list[4], "apple");
-		assertEquals(list[5], "cat");
+		assertEquals(list[5], "fox");
 	}
 
 	@Test
@@ -133,8 +133,8 @@ class BinaryMaxHeapTest {
 		assertEquals(list[2], "purple");
 		assertEquals(list[3], "dog");
 		assertEquals(list[4], "apple");
-		assertEquals(list[5], "cat");
-		assertEquals(list[6], "fox");
+		assertEquals(list[5], "fox");
+		assertEquals(list[6], "cat");
 	}
 	
 	@Test
@@ -183,9 +183,9 @@ class BinaryMaxHeapTest {
 		Object[] list = heap4.toArray();
 		assertEquals(list[0], "banana");
 		assertEquals(list[1], "apple");
-		assertEquals(list[2], "fox");
+		assertEquals(list[2], "cat");
 		assertEquals(list[3], "dog");
-		assertEquals(list[4], "cat");
+		assertEquals(list[4], "fox");
 	}
 	
 	@Test
