@@ -1,4 +1,3 @@
-
 package assign11;
 
 import java.io.File;
@@ -105,7 +104,7 @@ public class TextInput{
 			}
 			else {
 				LinkedList<Edge<String>> adjList = v.getAdj();
-				adjList.sort((o1, o2) -> o2.getWeight() - o1.getWeight());
+				adjList.sort((o1, o2) -> o2.compare(o1, o2));
 				Iterator<Edge<String>> iter = adjList.iterator();
 				Edge<String> edge = iter.next();
 				int weightSum = 0;
@@ -138,7 +137,7 @@ public class TextInput{
 			
 			else {
 				LinkedList<Edge<String>> adjList = v.getAdj();
-				adjList.sort((o1, o2) -> o2.getWeight() - o1.getWeight());
+				adjList.sort((o1, o2) -> o2.compare(o1, o2));
 				Edge<String> edge = adjList.getFirst();
 				
 				text += edge.getDest().getItem();
