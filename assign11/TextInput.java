@@ -1,4 +1,3 @@
-
 package assign11;
 
 import java.io.File;
@@ -68,7 +67,7 @@ public class TextInput {
 		}
 		
 		catch (FileNotFoundException e) {
-			System.out.println("File not found");
+			System.err.println("File not found");
 		}
 		
 		return table;
@@ -96,23 +95,26 @@ public class TextInput {
 		Random rng = new Random(1000);
 		double number = rng.nextInt()/1000;
 		Vertex<String> v = graph.getVertex(seedWord);
-		String randomText = seedWord;
-		for (int i = 0; i < k; i++) {
-			if (v.getAdj().size() == 0)
+		String randomText = seedWord + " ";
+		for (int i = 1; i < k; i++) {
+			if (v.getAdj().size() == 0) {
 				v = graph.getVertex(seedWord);
-			LinkedList<Edge<String>> adjList = v.getAdj();
-			adjList.sort((o1, o2) -> o2.getWeight() - o1.getWeight());
-			Iterator<Edge<String>> iter = adjList.iterator();
-			
-			Edge<String> edge = iter.next();
-			int weightSum = edge.getWeight();
-			while (weightSum < number) {
-				edge = iter.next();
-				weightSum += edge.getWeight();
+				randomText += seedWord;
 			}
-			
-			randomText += edge.getDest().getItem();
-			v = edge.getDest();
+			else {
+				LinkedList<Edge<String>> adjList = v.getAdj();
+				adjList.sort((o1, o2) -> o2.getWeight() - o1.getWeight());
+				Iterator<Edge<String>> iter = adjList.iterator();
+				Edge<String> edge = iter.next();
+				int weightSum = 0;
+				while (iter.hasNext() && weightSum < number) {
+					edge = iter.next();
+					weightSum += edge.getWeight();
+				}
+				
+				randomText += edge.getDest().getItem();
+				v = edge.getDest();
+			}
 			
 			if (i < k - 1)
 				randomText += " ";
@@ -125,16 +127,21 @@ public class TextInput {
 		if (k == 0)
 			return "";
 		Vertex<String> v = graph.getVertex(seedWord);
-		String text = seedWord;
-		for (int i = 0; i < k; i++) {
-			if (v.getAdj().size() == 0)
+		String text = seedWord + " ";
+		for (int i = 1; i < k; i++) {
+			if (v.getAdj().size() == 0) {
 				v = graph.getVertex(seedWord);
-			LinkedList<Edge<String>> adjList = v.getAdj();
-			adjList.sort((o1, o2) -> o2.getWeight() - o1.getWeight());
-			Edge<String> edge = adjList.getFirst();
+				text += seedWord;
+			}
 			
-			text += edge.getDest().getItem();
-			v = edge.getDest();
+			else {
+				LinkedList<Edge<String>> adjList = v.getAdj();
+				adjList.sort((o1, o2) -> o2.getWeight() - o1.getWeight());
+				Edge<String> edge = adjList.getFirst();
+				
+				text += edge.getDest().getItem();
+				v = edge.getDest();
+			}
 			
 			if (i < k - 1)
 				text += " ";
