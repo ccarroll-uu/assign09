@@ -11,7 +11,7 @@ import java.util.LinkedList;
  * @version March 12, 2024
  */
 
-public class Vertex<T> {
+public class Vertex <T extends Comparable<T>> {
 	private T item;
 	private LinkedList<Edge<T>> adj;
 	private int indegree;
@@ -34,7 +34,7 @@ public class Vertex<T> {
 	 * Adds an edge from this vertex to the specified vertex.
 	 * @param v - vertex to connect this vertex to with an edge.
 	 */
-	public void addEdge(Vertex<T> v, int weight) {
+	public void addEdge(Vertex<T> v, double weight) {
 		adj.add(new Edge<T>(v, weight));
 	}
 	
