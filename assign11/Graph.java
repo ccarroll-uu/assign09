@@ -1,3 +1,4 @@
+
 package assign11;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class Graph <T> {
 	 * @param name1 - string name for source vertex
 	 * @param name2 - string name for destination vertex
 	 */
-	public void addEdge(T item1, T item2) {
+	public void addEdge(T item1, T item2, int weight) {
 		Vertex<T> vertex1;
 		// if vertex already exists in graph, get its object
 		if(vertices.containsKey(item1))
@@ -57,7 +58,7 @@ public class Graph <T> {
 		}
 
 		// add new directed edge from vertex1 to vertex2
-		vertex1.addEdge(vertex2);
+		vertex1.addEdge(vertex2, weight);
 		vertex2.setIndegree("add");
 	}
 	
