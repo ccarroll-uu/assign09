@@ -1,4 +1,3 @@
-
 package assign11;
 
 import java.util.ArrayList;
@@ -60,6 +59,10 @@ public class Graph <T> {
 		// add new directed edge from vertex1 to vertex2
 		vertex1.addEdge(vertex2, weight);
 		vertex2.setIndegree("add");
+	}
+	
+	public Vertex<T> getVertex(T item) {
+		return vertices.get(item);
 	}
 	
 	
