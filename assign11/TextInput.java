@@ -1,9 +1,7 @@
-
 package assign11;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -95,7 +93,10 @@ public class TextInput {
 		Random rng = new Random(1000);
 		double number = rng.nextInt()/1000;
 		Vertex<String> v = graph.getVertex(seedWord);
+		String randomText = seedWord;
 		for (int i = 0; i < k; i++) {
+			if (v.getAdj().size() == 0)
+				v = graph.getVertex(seedWord);
 			LinkedList<Edge<String>> adjList = v.getAdj();
 			adjList.sort((o1, o2) -> o2.getWeight() - o1.getWeight());
 			Iterator<Edge<String>> iter = adjList.iterator();
@@ -106,7 +107,28 @@ public class TextInput {
 				edge = iter.next();
 				weightSum += edge.getWeight();
 			}
+			
+			randomText += edge.getDest().getItem();
+			v = edge.getDest();
 		}
 		
+		return randomText;
+	}
+	
+	public String mostLikelyText(String seedWord, int k) {
+		Vertex<String> v = graph.getVertex(seedWord);
+		String text = seedWord;
+		for (int i = 0; i < k; i++) {
+			if (v.getAdj().size() == 0)
+				v = graph.getVertex(seedWord);
+			LinkedList<Edge<String>> adjList = v.getAdj();
+			adjList.sort((o1, o2) -> o2.getWeight() - o1.getWeight());
+			Edge<String> edge = adjList.getFirst();
+			
+			text += edge.getDest().getItem();
+			v = edge.getDest();
+		}
+		
+		return text;
 	}
 }
