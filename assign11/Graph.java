@@ -17,7 +17,7 @@ import java.util.Stack;
  * @author Erin Parker, Courtney Carroll
  * @version March 12, 2024
  */
-public class Graph <T> {
+public class Graph <T extends Comparable<T>> {
 
 	// the graph -- a set of vertices (String name mapped to Vertex instance)
 	private HashMap<T, Vertex<T>> vertices;
@@ -37,7 +37,7 @@ public class Graph <T> {
 	 * @param name1 - string name for source vertex
 	 * @param name2 - string name for destination vertex
 	 */
-	public void addEdge(T item1, T item2, int weight) {
+	public void addEdge(T item1, T item2, double weight) {
 		Vertex<T> vertex1;
 		// if vertex already exists in graph, get its object
 		if(vertices.containsKey(item1))
