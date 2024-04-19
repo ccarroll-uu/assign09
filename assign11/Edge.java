@@ -1,4 +1,3 @@
-
 package assign11;
 
 import java.util.Comparator;
@@ -9,15 +8,15 @@ import java.util.Comparator;
  * @author Erin Parker, Courtney Carroll
  * @version March 12, 2024
  */
-public class Edge<T> implements Comparator<Edge<T>>{
+public class Edge <T extends Comparable<T>> implements Comparator<Edge<T>>{
 	private Vertex<T> dest;
-	private int weight;
+	private double weight;
 	
 	/**
 	 * Constructs an edge.
 	 * @param dest - the vertex that is the destination of the edge.
 	 */
-	public Edge(Vertex<T> dest, int weight) {
+	public Edge(Vertex<T> dest, double weight) {
 		this.dest = dest;
 		this.weight = weight;
 	}
@@ -30,14 +29,14 @@ public class Edge<T> implements Comparator<Edge<T>>{
 		return this.dest;
 	}
 	
-	public int getWeight() {
+	public double getWeight() {
 		return this.weight;
 	}
 
 	@Override
 	public int compare(Edge<T> o1, Edge<T> o2) {
-		if (o2.weight - o1.weight == 0)
-			return 
-		return 0;
+		if (o1.weight - o2.weight == 0)
+			return o1.getDest().getItem().compareTo(o2.getDest().getItem());
+		return (int) ((o1.weight - o2.weight) * 1000);
 	}
 }
