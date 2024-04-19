@@ -1,3 +1,4 @@
+
 package assign11;
 
 import java.io.File;
@@ -5,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -93,7 +96,16 @@ public class TextInput {
 		double number = rng.nextInt()/1000;
 		Vertex<String> v = graph.getVertex(seedWord);
 		for (int i = 0; i < k; i++) {
-			v.getAdj().sort();
+			LinkedList<Edge<String>> adjList = v.getAdj();
+			adjList.sort((o1, o2) -> o2.getWeight() - o1.getWeight());
+			Iterator<Edge<String>> iter = adjList.iterator();
+			
+			Edge<String> edge = iter.next();
+			int weightSum = edge.getWeight();
+			while (weightSum < number) {
+				edge = iter.next();
+				weightSum += edge.getWeight();
+			}
 		}
 		
 	}
