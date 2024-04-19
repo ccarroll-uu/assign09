@@ -8,13 +8,15 @@ package assign11;
  */
 public class Edge<T> {
 	private Vertex<T> dest;
+	private int weight;
 	
 	/**
 	 * Constructs an edge.
 	 * @param dest - the vertex that is the destination of the edge.
 	 */
-	public Edge(Vertex<T> dest) {
+	public Edge(Vertex<T> dest, int weight) {
 		this.dest = dest;
+		this.weight = weight;
 	}
 	
 	/**
@@ -23,5 +25,9 @@ public class Edge<T> {
 	 */
 	public Vertex<T> getDest(){
 		return this.dest;
+	}
+	
+	public int getWeight() {
+		return this.weight;
 	}
 }
