@@ -1,7 +1,9 @@
+
 package assign11;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -9,7 +11,7 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class TextInput {
+public class TextInput{
 	private Hashtable<String, Hashtable<String, Integer>> table;
 	private Graph<String> graph;
 	
@@ -149,4 +151,5 @@ public class TextInput {
 //		System.out.println(text);
 		return text;
 	}
+	
 }
