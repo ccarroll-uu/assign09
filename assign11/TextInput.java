@@ -1,3 +1,4 @@
+
 package assign11;
 
 import java.io.File;
@@ -90,6 +91,8 @@ public class TextInput {
 	}
 	
 	public String randomText(String seedWord, int k) {
+		if (k == 0)
+			return "";
 		Random rng = new Random(1000);
 		double number = rng.nextInt()/1000;
 		Vertex<String> v = graph.getVertex(seedWord);
@@ -110,12 +113,17 @@ public class TextInput {
 			
 			randomText += edge.getDest().getItem();
 			v = edge.getDest();
+			
+			if (i < k - 1)
+				randomText += " ";
 		}
 		
 		return randomText;
 	}
 	
 	public String mostLikelyText(String seedWord, int k) {
+		if (k == 0)
+			return "";
 		Vertex<String> v = graph.getVertex(seedWord);
 		String text = seedWord;
 		for (int i = 0; i < k; i++) {
@@ -127,8 +135,11 @@ public class TextInput {
 			
 			text += edge.getDest().getItem();
 			v = edge.getDest();
+			
+			if (i < k - 1)
+				text += " ";
 		}
-		
+//		System.out.println(text);
 		return text;
 	}
 }
