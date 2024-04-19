@@ -36,4 +36,16 @@ class TextInputTest {
 		assertEquals(input3.mostLikelyText("hello", 4), "hello world hello world");
 		assertEquals(input3.mostLikelyText("world", 4), "world world world world");
 	}
+	
+	@Test
+	void testStr2() {
+		TextInput input2 = new TextInput(new File(str2));
+		assertEquals(input2.mostLikelyText("a", 0), "");
+		assertEquals(input2.mostLikelyText("a", 2), "a b");
+		assertEquals(input2.mostLikelyText("b", 2), "b a");
+		assertEquals(input2.mostLikelyText("d", 3), "d a b");
+		assertEquals(input2.mostLikelyText("a", 4), "a b a b");
+		assertEquals(input2.mostLikelyText("b", 4), "b a b a");
+		
+	}
 }
