@@ -1,3 +1,4 @@
+
 package assign11;
 
 import java.io.File;
@@ -18,6 +19,9 @@ public class TextGenerator {
 		
 		if (outputType == null || outputType == "all") {
 			System.out.println(input.randomText(seedWord, k));
+		}
+		else {
+			System.out.println(input.mostLikelyText(seedWord, k));
 		}
 		
 		
