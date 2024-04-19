@@ -1,4 +1,7 @@
+
 package assign11;
+
+import java.util.Comparator;
 
 /**
  * Represents an edge in a graph.
@@ -6,7 +9,7 @@ package assign11;
  * @author Erin Parker, Courtney Carroll
  * @version March 12, 2024
  */
-public class Edge<T> {
+public class Edge<T> implements Comparator<Edge<T>>{
 	private Vertex<T> dest;
 	private int weight;
 	
@@ -29,5 +32,12 @@ public class Edge<T> {
 	
 	public int getWeight() {
 		return this.weight;
+	}
+
+	@Override
+	public int compare(Edge<T> o1, Edge<T> o2) {
+		if (o2.weight - o1.weight == 0)
+			return 
+		return 0;
 	}
 }
