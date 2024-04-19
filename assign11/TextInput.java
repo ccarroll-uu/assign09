@@ -2,22 +2,29 @@ package assign11;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Scanner;
 
 import assign07.Vertex;
 
 public class TextInput {
-
 	private Hashtable<String, Hashtable<String, Integer>> table;
+	private Graph<String> graph;
 	
 	public TextInput(File file) {
 		table = readFromFile(file);
+		graph = makeGraph(table);
 	}
 	
 	
-	
-	// Check Java LinkedList
+	/**
+	 * Private method that stores frequency of words and their connections from text file.
+	 * 
+	 * @param file - given file
+	 * @return hash table storing the frequency of words their connections
+	 */
 	private Hashtable<String, Hashtable<String, Integer>> readFromFile(File file){
 		Hashtable<String, Hashtable<String, Integer>> table = new Hashtable<String, Hashtable<String, Integer>>();
 		String prev = null;
@@ -66,31 +73,17 @@ public class TextInput {
 		return table;
 	}
 	
-	private makeGraph(Hashtable<String, Hashtable<String, Integer>> table) {
+	private Graph<String> makeGraph(Hashtable<String, Hashtable<String, Integer>> table) {
+		Graph<String> graph = new Graph<String>();
+		Enumeration<String> keys = table.keys();
+		for (int i = 0; i < table.size(); i++) {
+			String key = keys.nextElement();
+			Enumeration<String> innerKeys = table.get(key).keys();
+			for(int j = 0; j < table.get(key).size(); j++) {
+				String innerKey = innerKeys.nextElement();
+			}
 		
-	}
-	
-	public void addEdge(String prev, String word) {
-		Vertex<T> vertex1;
-		// if vertex already exists in graph, get its object
-		if(vertices.containsKey(item1))
-			vertex1 = vertices.get(item1);
-		// else, create a new object and add to graph
-		else {
-			vertex1 = new Vertex<T>(item1);
-			vertices.put(item1, vertex1);
 		}
-
-		Vertex<T> vertex2;
-		if(vertices.containsKey(item2))
-			vertex2 = vertices.get(item2);
-		else {
-			vertex2 = new Vertex<T>(item2);
-			vertices.put(item2, vertex2);
-		}
-
-		// add new directed edge from vertex1 to vertex2
-		vertex1.addEdge(vertex2);
-		vertex2.setIndegree("add");
+			
 	}
 }
