@@ -1,3 +1,4 @@
+
 package assign11;
 
 import java.util.Iterator;
@@ -34,8 +35,8 @@ public class Vertex<T> {
 	 * Adds an edge from this vertex to the specified vertex.
 	 * @param v - vertex to connect this vertex to with an edge.
 	 */
-	public void addEdge(Vertex<T> v) {
-		adj.add(new Edge<T>(v));
+	public void addEdge(Vertex<T> v, int weight) {
+		adj.add(new Edge<T>(v, weight));
 	}
 	
 	/**
@@ -120,6 +121,4 @@ public class Vertex<T> {
 	public Iterator<Edge<T>> edges(){
 		return adj.iterator();
 	}
-
-	
 }
