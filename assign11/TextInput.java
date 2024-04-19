@@ -5,9 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Random;
 import java.util.Scanner;
-
-import assign07.Vertex;
 
 public class TextInput {
 	private Hashtable<String, Hashtable<String, Integer>> table;
@@ -81,9 +80,21 @@ public class TextInput {
 			Enumeration<String> innerKeys = table.get(key).keys();
 			for(int j = 0; j < table.get(key).size(); j++) {
 				String innerKey = innerKeys.nextElement();
+				int count = table.get(key).get(innerKey);
+				int weight = count / table.get(key).size();
+				graph.addEdge(key, innerKey, weight);
 			}
-		
 		}
-			
+		return graph;	
+	}
+	
+	public String randomText(String seedWord, int k) {
+		Random rng = new Random(1000);
+		double number = rng.nextInt()/1000;
+		Vertex<String> v = graph.getVertex(seedWord);
+		for (int i = 0; i < k; i++) {
+			v.getAdj().sort();
+		}
+		
 	}
 }
