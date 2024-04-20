@@ -1,3 +1,4 @@
+
 package comprehensive;
 
 import java.io.File;
@@ -117,6 +118,54 @@ public class TextInput{
 			}
 		}
 		return graph;	
+	}
+	
+	/**
+	 * Generates random text based off the given seed word and word frequency.
+	 * The output does not include the seed word. If there are no words connected to the
+	 * current word, the function stops generating words.
+	 * 
+	 * @param seedWord - given seed word
+	 * @param k - number of random words to generate
+	 * @return - String of randomly generated words
+	 */
+	public String randomTextWithoutSeed(String seedWord, int k) {
+		if (k == 0)
+			return "";
+		Random rng = new Random();
+		
+		Vertex<String> v = graph.getVertex(seedWord);
+		String randomText = "";
+		
+		// Add k number of words
+		for (int i = 0; i < k; i++) {
+			double number = rng.nextDouble(1);
+			// If adjacency list is empty (no next word)
+			if (v.getAdj().size() == 0) {
+				break;
+			}
+			// Reverse sort adjacency list
+			else {
+				LinkedList<Edge<String>> adjList = v.getAdj();
+				adjList.sort((o1, o2) -> o2.compare(o1, o2));
+				Iterator<Edge<String>> iter = adjList.iterator();
+				Edge<String> edge = iter.next();
+				double weightSum = edge.getWeight();
+				// Use random double to determine which word to generate
+				while (iter.hasNext() && weightSum < number) {
+					edge = iter.next();
+					weightSum += edge.getWeight();
+				}
+				
+				randomText += edge.getDest().getItem();
+				v = edge.getDest();
+			}
+			
+			if (i < k - 1)
+				randomText += " ";
+		}
+		
+		return randomText;
 	}
 	
 	/**
