@@ -1,8 +1,8 @@
+
 package assign11;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -34,42 +34,38 @@ public class TextInput{
 	
 			while (input.hasNext()) {
 				String word = input.next();
-				word.toLowerCase();
-				if (!Character.toString(word.charAt(0)).matches("[^\\w]")) {
-					String[] wordSplit = word.split("[^\\w]");
-					word = wordSplit[0];
-				}
+				while (input.hasNext() && Character.toString(word.charAt(0)).matches("[^\\w]"))
+					word = input.next();
+				String[] wordSplit = word.split("[^\\w]");
+				word = wordSplit[0];
+				word = word.toLowerCase();
 				
-				else if (Character.toString(word.charAt(0)).matches("[^\\w]")){
-					break;
-				}
-				
-				else if (prev == null) {
+				if (prev == null) {
 					prev = word;
-					break;
 				}
-				
-				if (table.containsKey(prev)) {
-					Hashtable<String, Integer> innerTable = table.get(prev);
-					if (innerTable.containsKey(word)) {
-						int count = innerTable.get(word);
-						innerTable.put(word, count++);
-						table.put(prev, innerTable);
+				else {
+					if (table.containsKey(prev)) {
+						Hashtable<String, Integer> innerTable = table.get(prev);
+						if (innerTable.containsKey(word)) {
+							int count = innerTable.get(word);
+							innerTable.put(word, count++);
+							table.put(prev, innerTable);
+						}
+						else {
+							innerTable.put(word, 1);
+							table.put(prev, innerTable);
+						}
 					}
+					
 					else {
+						Hashtable<String, Integer> innerTable = new Hashtable<String, Integer>();
 						innerTable.put(word, 1);
 						table.put(prev, innerTable);
 					}
+					prev = word;
 				}
-				
-				else {
-					Hashtable<String, Integer> innerTable = new Hashtable<String, Integer>();
-					innerTable.put(word, 1);
-					table.put(prev, innerTable);
-				}
-				prev = word;
-				
 			}
+			
 			input.close();
 		}
 		
@@ -153,7 +149,6 @@ public class TextInput{
 			if (i < k - 1)
 				text += " ";
 		}
-//		System.out.println(text);
 		return text;
 	}
 	
