@@ -1,4 +1,3 @@
-
 package assign11;
 
 import java.io.File;
@@ -10,10 +9,22 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * This class takes in a text file and generates random text similar to the text in
+ * the file.
+ * 
+ * @author Isabelle Cook and Courtney Carroll
+ * @version April 20, 2024
+ */
 public class TextInput{
 	private Hashtable<String, Hashtable<String, Integer>> table;
 	private Graph<String> graph;
 	
+	/**
+	 * Constructor for the TextInput class.
+	 * 
+	 * @param file - given file.
+	 */
 	public TextInput(File file) {
 		table = readFromFile(file);
 		graph = makeGraph(table);
@@ -76,6 +87,12 @@ public class TextInput{
 		return table;
 	}
 	
+	/**
+	 * Creates a graph from the given Hashtable.
+	 * 
+	 * @param table - given Hashtable
+	 * @return a Graph with unique words from the input file.
+	 */
 	private Graph<String> makeGraph(Hashtable<String, Hashtable<String, Integer>> table) {
 		Graph<String> graph = new Graph<String>();
 		Enumeration<String> keys = table.keys();
@@ -85,18 +102,25 @@ public class TextInput{
 			for(int j = 0; j < table.get(key).size(); j++) {
 				String innerKey = innerKeys.nextElement();
 				int count = table.get(key).get(innerKey);
-				int weight = count / table.get(key).size();
+				double weight = count / (double) table.get(key).size();
 				graph.addEdge(key, innerKey, weight);
 			}
 		}
 		return graph;	
 	}
 	
+	/**
+	 * Generates random text based off the given seed word and word frequency.
+	 * 
+	 * @param seedWord - given seed word
+	 * @param k - number of random words to generate
+	 * @return - String of randomly generated words
+	 */
 	public String randomText(String seedWord, int k) {
 		if (k == 0)
 			return "";
-		Random rng = new Random(1000);
-		double number = rng.nextInt()/1000;
+		Random rng = new Random();
+		double number = rng.nextDouble(1);
 		Vertex<String> v = graph.getVertex(seedWord);
 		String randomText = seedWord + " ";
 		for (int i = 1; i < k; i++) {
@@ -109,7 +133,7 @@ public class TextInput{
 				adjList.sort((o1, o2) -> o2.compare(o1, o2));
 				Iterator<Edge<String>> iter = adjList.iterator();
 				Edge<String> edge = iter.next();
-				int weightSum = 0;
+				double weightSum = 0;
 				while (iter.hasNext() && weightSum < number) {
 					edge = iter.next();
 					weightSum += edge.getWeight();
@@ -126,6 +150,16 @@ public class TextInput{
 		return randomText;
 	}
 	
+	/**
+	 * Generates text based off a seed word. The next word is the word that most
+	 * frequently follows the given word. If there is more than one word that most
+	 * frequently follows the given word, the word that is first lexicographically
+	 * is used. If there is no next word, the seed word is used as the next word.
+	 * 
+	 * @param seedWord - given seed word. Must be a word within the input file.
+	 * @param k - number of words to generate
+	 * @return a String of generated words based off frequency
+	 */
 	public String mostLikelyText(String seedWord, int k) {
 		if (k == 0)
 			return "";
