@@ -1,4 +1,3 @@
-
 package assign11;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +16,7 @@ class TextInputTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		str1 = "src/assign11/Baa, baa black sheep.txt";
-		str2 = "src/assign11/abc.txt";
+		str2 = "src/assign11/abc2.txt";
 		str3 = "src/assign11/helloWorld.txt";
 		str4 = "src/assign11/trickyFormatting.txt";
 	}
@@ -49,8 +48,18 @@ class TextInputTest {
 		assertEquals(input2.mostLikelyText("b", 4), "b a b a");
 	}
 	
+	/*
 	@Test
 	void testStr1() {
 		TextInput input1 = new TextInput(new File(str1));
+		assertEquals(input1.mostLikelyText("for", 3), "for my dame");
 	}
+	*/
+	
+	@Test
+	void testStr4() {
+		TextInput input4 = new TextInput(new File(str4));
+		assertEquals(input4.mostLikelyText("things", 3), "things yup things");
+	}
+
 }
