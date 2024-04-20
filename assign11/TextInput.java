@@ -1,4 +1,3 @@
-
 package assign11;
 
 import java.io.File;
@@ -32,9 +31,7 @@ public class TextInput{
 		String prev = null;
 		try {
 			Scanner input = new Scanner(file);
-			if (input.hasNext())
-				prev = input.next().toLowerCase();
-			
+	
 			while (input.hasNext()) {
 				String word = input.next();
 				word.toLowerCase();
@@ -42,8 +39,15 @@ public class TextInput{
 					String[] wordSplit = word.split("[^\\w]");
 					word = wordSplit[0];
 				}
-				else
+				
+				else if (Character.toString(word.charAt(0)).matches("[^\\w]")){
 					break;
+				}
+				
+				else if (prev == null) {
+					prev = word;
+					break;
+				}
 				
 				if (table.containsKey(prev)) {
 					Hashtable<String, Integer> innerTable = table.get(prev);
@@ -63,6 +67,7 @@ public class TextInput{
 					innerTable.put(word, 1);
 					table.put(prev, innerTable);
 				}
+				prev = word;
 				
 			}
 			input.close();
