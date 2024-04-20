@@ -16,7 +16,7 @@ class TextInputTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		str1 = "src/assign11/Baa, baa black sheep.txt";
-		str2 = "src/assign11/abc2.txt";
+		str2 = "src/assign11/abc.txt";
 		str3 = "src/assign11/helloWorld.txt";
 		str4 = "src/assign11/trickyFormatting.txt";
 	}
@@ -46,10 +46,10 @@ class TextInputTest {
 		assertEquals(input2.mostLikelyText("d", 3), "d a b");
 		assertEquals(input2.mostLikelyText("a", 4), "a b a b");
 		assertEquals(input2.mostLikelyText("b", 4), "b a b a");
-		//assertEquals(input2.mostLikelyText("z", 4), "z z z z");
+		assertEquals(input2.mostLikelyText("z", 4), "z z z z");
 		
 		System.out.println(input2.randomText("d", 10));
-		//System.out.println(input2.randomText("z", 8));
+		System.out.println(input2.randomText("z", 8));
 	}
 	
 	@Test
@@ -58,6 +58,7 @@ class TextInputTest {
 		assertEquals(input1.mostLikelyText("for", 3), "for my dame");
 		assertEquals(input1.mostLikelyText("baa", 4), "baa baa baa baa");
 		assertEquals(input1.mostLikelyText("and", 6), "and one for my dame and");
+		System.out.println(input1.randomText("baa", 10));
 	}
 	
 	@Test
@@ -68,4 +69,3 @@ class TextInputTest {
 		assertEquals(input4.mostLikelyText("few", 6), "few them punctuation or formatting things");
 	}
 }
-
