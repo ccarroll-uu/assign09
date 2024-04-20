@@ -1,3 +1,4 @@
+
 package assign11;
 
 import java.io.File;
@@ -32,7 +33,7 @@ public class TextInput{
 		try {
 			Scanner input = new Scanner(file);
 			if (input.hasNext())
-				prev = input.next();
+				prev = input.next().toLowerCase();
 			
 			while (input.hasNext()) {
 				String word = input.next();
@@ -137,7 +138,7 @@ public class TextInput{
 			
 			else {
 				LinkedList<Edge<String>> adjList = v.getAdj();
-				adjList.sort((o1, o2) -> o2.compare(o1, o2));
+				adjList.sort((o1, o2) -> o1.compare(o1, o2));
 				Edge<String> edge = adjList.getFirst();
 				
 				text += edge.getDest().getItem();
