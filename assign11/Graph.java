@@ -1,4 +1,3 @@
-
 package assign11;
 
 import java.util.HashMap;
@@ -53,13 +52,23 @@ public class Graph <T extends Comparable<T>> {
 
 		// add new directed edge from vertex1 to vertex2
 		vertex1.addEdge(vertex2, weight);
-		vertex2.setIndegree("add");
 	}
 	
+	/**
+	 * Gets vertex holding given item.
+	 * 
+	 * @param item - given item
+	 * @return vertex with given item
+	 */
 	public Vertex<T> getVertex(T item) {
 		return vertices.get(item);
 	}
 	
+	/**
+	 * Returns all vertices in the graph.
+	 * 
+	 * @return set of unique vertices
+	 */
 	public Set<T> getVertices(){
 		return vertices.keySet();
 	}
