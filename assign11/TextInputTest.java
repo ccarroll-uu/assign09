@@ -1,3 +1,4 @@
+
 package assign11;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,6 +47,10 @@ class TextInputTest {
 		assertEquals(input2.mostLikelyText("d", 3), "d a b");
 		assertEquals(input2.mostLikelyText("a", 4), "a b a b");
 		assertEquals(input2.mostLikelyText("b", 4), "b a b a");
-		
+	}
+	
+	@Test
+	void testStr1() {
+		TextInput input1 = new TextInput(new File(str1));
 	}
 }
