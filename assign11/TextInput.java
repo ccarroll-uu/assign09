@@ -1,12 +1,11 @@
-
 package comprehensive;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -129,43 +128,35 @@ public class TextInput{
 	 * @param k - number of random words to generate
 	 * @return - String of randomly generated words
 	 */
-	public String randomTextWithoutSeed(String seedWord, int k) {
+	public String kMostProbableWords(String seedWord, int k) {
 		if (k == 0)
 			return "";
-		Random rng = new Random();
 		
 		Vertex<String> v = graph.getVertex(seedWord);
-		String randomText = "";
+		String text = "";
+		
+		// If adjacency list is empty (no next word)
+		if (v.getAdj().size() == 0) {
+				return text;
+			}
+		
+		// Reverse sort adjacency list
+		ArrayList<Edge<String>> adjList = v.getAdj();
+		adjList.sort((o1, o2) -> o2.compare(o1, o2));
+		Iterator<Edge<String>> iter = adjList.iterator();
 		
 		// Add k number of words
 		for (int i = 0; i < k; i++) {
-			double number = rng.nextDouble(1);
-			// If adjacency list is empty (no next word)
-			if (v.getAdj().size() == 0) {
+			if (i >= adjList.size())
 				break;
-			}
-			// Reverse sort adjacency list
-			else {
-				LinkedList<Edge<String>> adjList = v.getAdj();
-				adjList.sort((o1, o2) -> o2.compare(o1, o2));
-				Iterator<Edge<String>> iter = adjList.iterator();
-				Edge<String> edge = iter.next();
-				double weightSum = edge.getWeight();
-				// Use random double to determine which word to generate
-				while (iter.hasNext() && weightSum < number) {
-					edge = iter.next();
-					weightSum += edge.getWeight();
-				}
-				
-				randomText += edge.getDest().getItem();
-				v = edge.getDest();
-			}
+			Edge<String> edge = iter.next();
 			
-			if (i < k - 1)
-				randomText += " ";
+			if (i > 0)
+				text += " ";
+			text += edge.getDest().getItem();	
 		}
 		
-		return randomText;
+		return text;
 	}
 	
 	/**
@@ -181,7 +172,7 @@ public class TextInput{
 		Random rng = new Random();
 		
 		Vertex<String> v = graph.getVertex(seedWord);
-		String randomText = seedWord + " ";
+		String randomText = seedWord;
 		
 		// Add k number of words
 		for (int i = 1; i < k; i++) {
@@ -189,11 +180,11 @@ public class TextInput{
 			// If adjacency list is empty (no next word)
 			if (v.getAdj().size() == 0) {
 				v = graph.getVertex(seedWord);
-				randomText += seedWord;
+				randomText += " " + seedWord;
 			}
 			// Reverse sort adjacency list
 			else {
-				LinkedList<Edge<String>> adjList = v.getAdj();
+				ArrayList<Edge<String>> adjList = v.getAdj();
 				adjList.sort((o1, o2) -> o2.compare(o1, o2));
 				Iterator<Edge<String>> iter = adjList.iterator();
 				Edge<String> edge = iter.next();
@@ -204,12 +195,9 @@ public class TextInput{
 					weightSum += edge.getWeight();
 				}
 				
-				randomText += edge.getDest().getItem();
+				randomText += " " + edge.getDest().getItem();
 				v = edge.getDest();
-			}
-			
-			if (i < k - 1)
-				randomText += " ";
+			}	
 		}
 		
 		return randomText;
@@ -229,26 +217,23 @@ public class TextInput{
 		if (k == 0)
 			return "";
 		Vertex<String> v = graph.getVertex(seedWord);
-		String text = seedWord + " ";
+		String text = seedWord;
 		// Add k number of words
 		for (int i = 1; i < k; i++) {
 			// If adjacency list is empty (no next word)
 			if (v.getAdj().size() == 0) {
 				v = graph.getVertex(seedWord);
-				text += seedWord;
+				text += " " + seedWord;
 			}
 			// Sort list and add next word with highest frequency
 			else {
-				LinkedList<Edge<String>> adjList = v.getAdj();
+				ArrayList<Edge<String>> adjList = v.getAdj();
 				adjList.sort((o1, o2) -> o1.compare(o1, o2));
-				Edge<String> edge = adjList.getFirst();
+				Edge<String> edge = adjList.get(0);
 				
-				text += edge.getDest().getItem();
+				text += " " + edge.getDest().getItem();
 				v = edge.getDest();
 			}
-			
-			if (i < k - 1)
-				text += " ";
 		}
 		return text;
 	}
