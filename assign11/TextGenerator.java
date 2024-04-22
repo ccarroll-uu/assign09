@@ -1,4 +1,3 @@
-
 package comprehensive;
 
 import java.io.File;
@@ -29,7 +28,7 @@ public class TextGenerator {
 		TextInput input = new TextInput(new File(fileName));
 		
 		if (outputType == null) {
-			System.out.println(input.randomTextWithoutSeed(seedWord, k));
+			System.out.println(input.kMostProbableWords(seedWord, k));
 		}
 		else if (outputType == "all") {
 			System.out.println(input.randomText(seedWord, k));
