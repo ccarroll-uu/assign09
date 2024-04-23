@@ -20,7 +20,7 @@ import java.util.Set;
  * @version April 20, 2024
  */
 public class TextInput {
-	private HashMap<Node, ArrayList<Node>> table;
+	private HashMap<String, ArrayList<Node>> table;
 	
 	/**
 	 * The private Node class creates nodes for word frequency.
@@ -75,9 +75,9 @@ public class TextInput {
 	 * @param file - given file
 	 * @return hash table storing the frequency of words their connections
 	 */
-	private HashMap<Node, ArrayList<Node>> readFromFile(File file){
-		HashMap<Node, ArrayList<Node>> table = new HashMap<Node, ArrayList<Node>>();
-		Node prev = null;
+	private HashMap<String, ArrayList<Node>> readFromFile(File file){
+		HashMap<String, ArrayList<Node>> table = new HashMap<String, ArrayList<Node>>();
+		String prev = null;
 		try {
 			Scanner input = new Scanner(file);
 	
@@ -93,12 +93,11 @@ public class TextInput {
 				word = word.toLowerCase();
 				
 				if (prev == null) {
-					prev = new Node(word, 1);
+					prev = word;
 				}
 				else {
 					// Check if word and word after are contained in table
 					if (table.containsKey(prev)) {
-						table.put();
 						ArrayList<Node> nodeList = table.get(prev);
 						
 						if (nodeList.contains(word)) {
@@ -114,7 +113,7 @@ public class TextInput {
 					else {
 						ArrayList<Node> nodeList = new ArrayList<Node>();
 						nodeList.add(new Node(word, 1));
-						table.put(new Node(prev, 1), nodeList);
+						table.put(prev, nodeList);
 					}
 					
 					prev = word;
@@ -143,29 +142,35 @@ public class TextInput {
 	public String kMostProbableWords(String seedWord, int k) {
 		if (k == 0)
 			return "";
-		HashMap<String, Integer> innerKeys = table.get(seedWord);
+		ArrayList<Node> nodeList = table.get(seedWord);
 		String text = "";
 		
 		// If inner key list is empty (no next word)
-		if (innerKeys == null) {
+		if (nodeList == null) {
 				return text;
 			}
 		
 		// Reverse sort inner key list
-		Set<Entry<String, Integer>> innerKeySet = innerKeys.entrySet();
-		ArrayList<Entry<String, Integer>> innerKeyList = new ArrayList<Entry<String, Integer>>(innerKeySet);
-		innerKeyList.sort((Entry<String, Integer> o1, Entry<String, Integer> o2) -> compare(o1, o2));
+		nodeList.sort((o1, o2) -> o1.compare(o1, o2));
 		
 		// Add k number of words
 		for (int i = 0; i < k; i++) {
-			if (i >= innerKeyList.size())
+			if (i >= nodeList.size())
 				break;
 			if (i > 0)
 				text += " ";
-			text += innerKeyList.get(i).getKey();	
+			text += nodeList.get(i).data;	
 		}
 		
 		return text;
+	}
+	
+	private int calcFrequency(ArrayList<Node> nodeList) {
+		int frequency = 0;
+		for(Node node: nodeList) {
+			frequency += node.frequency;
+		}
+		return frequency;
 	}
 	
 	/**
@@ -180,30 +185,30 @@ public class TextInput {
 			return "";
 		Random rng = new Random();
 		
-		HashMap<String, Integer> innerKeys = table.get(seedWord);
+		ArrayList<Node> nodeList = table.get(seedWord);
 		String randomText = seedWord;
+		
 		
 		// Add k number of words
 		for (int i = 1; i < k; i++) {
 			double number = rng.nextDouble(1);
 			// If inner key list is empty (no next word)
-			if (innerKeys == null) {
-				innerKeys = table.get(seedWord);
+			if (nodeList == null) {
+				nodeList = table.get(seedWord);
 				randomText += " " + seedWord;
 			}
 			// Reverse sort inner key list
 			else {
-				Set<Entry<String, Integer>> innerKeySet = innerKeys.entrySet();
-				ArrayList<Entry<String, Integer>> innerKeyList = new ArrayList<Entry<String, Integer>>(innerKeySet);
-				innerKeyList.sort((Entry<String, Integer> o1, Entry<String, Integer> o2) -> compare(o1, o2));
-
+				nodeList.sort((o1, o2) -> o1.compare(o1, o2));
+				int frequency = calcFrequency(nodeList);
+				
 				double weightSum = 0;
 				// Use random double to determine which word to generate
-				for (int j = 0; j < innerKeyList.size(); j++) {
-					weightSum += innerKeyList.get(j).getValue()/ (double) innerKeys.size();
+				for (int j = 0; j < nodeList.size(); j++) {
+					weightSum += nodeList.get(j).frequency/ (double)frequency;
 					if (weightSum > number) {
-						randomText += " " + innerKeyList.get(j).getKey();
-						innerKeys = table.get(innerKeyList.get(j).getKey());
+						randomText += " " + nodeList.get(j).data;
+						nodeList = table.get(nodeList.get(j).data);
 						break;
 					}	
 				}
@@ -226,23 +231,20 @@ public class TextInput {
 	public String mostLikelyText(String seedWord, int k) {
 		if (k == 0)
 			return "";
-		HashMap<String, Integer> innerKeys = table.get(seedWord);
+		ArrayList<Node> nodeList = table.get(seedWord);
 		String text = seedWord;
 		// Add k number of words
 		for (int i = 1; i < k; i++) {
 			// If inner key list is empty (no next word)
-			if (innerKeys == null) {
-				innerKeys = table.get(seedWord);
+			if (nodeList == null) {
+				nodeList = table.get(seedWord);
 				text += " " + seedWord;
 			}
 			// Sort list and add next word with highest frequency
 			else {
-				Set<Entry<String, Integer>> innerKeySet = innerKeys.entrySet();
-				ArrayList<Entry<String, Integer>> innerKeyList = new ArrayList<Entry<String, Integer>>(innerKeySet);
-				innerKeyList.sort((Entry<String, Integer> o1, Entry<String, Integer> o2) -> compare(o1, o2));
-				
-				text += " " + innerKeyList.get(0).getKey();
-				innerKeys = table.get(innerKeyList.get(0).getKey());
+				nodeList.sort((o1, o2) -> o1.compare(o1, o2));
+				text += " " + nodeList.get(0).data;
+				nodeList = table.get(nodeList.get(0).data);
 			}
 		}
 		return text;
