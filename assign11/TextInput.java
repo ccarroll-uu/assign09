@@ -1,10 +1,14 @@
+
 package comprehensive;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
@@ -16,9 +20,8 @@ import java.util.Set;
  * @author Isabelle Cook and Courtney Carroll
  * @version April 20, 2024
  */
-public class TextInput{
+public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 	private HashMap<String, HashMap<String, Integer>> table;
-	private Graph<String> graph;
 	
 	/**
 	 * Constructor for the TextInput class.
@@ -27,7 +30,6 @@ public class TextInput{
 	 */
 	public TextInput(File file) {
 		table = readFromFile(file);
-		graph = makeGraph(table);
 	}
 	
 	
@@ -94,34 +96,6 @@ public class TextInput{
 	}
 	
 	/**
-	 * Creates a graph from the given HashMap.
-	 * 
-	 * @param table - given HashMap
-	 * @return a Graph with unique words from the input file.
-	 */
-	private Graph<String> makeGraph(HashMap<String, HashMap<String, Integer>> table) {
-		Graph<String> graph = new Graph<String>();
-		Set<String> keys = table.keySet();
-		Iterator<String> iter = keys.iterator();
-		// Go through all of words in table
-		for (int i = 0; i < table.size(); i++) {
-			String key = iter.next();
-			Set<String> innerKeys = table.get(key).keySet();
-			Iterator<String> innerIter = innerKeys.iterator();
-			// Go through all of words in inner table
-			for(int j = 0; j < table.get(key).size(); j++) {
-				String innerKey = innerIter.next();
-				// Calculate edge weight
-				int count = table.get(key).get(innerKey);
-				double weight = count / (double) table.get(key).size();
-				// Add edge with word in table going to word in inner table
-				graph.addEdge(key, innerKey, weight);
-			}
-		}
-		return graph;	
-	}
-	
-	/**
 	 * Generates random text based off the given seed word and word frequency.
 	 * The output does not include the seed word. If there are no words connected to the
 	 * current word, the function stops generating words.
@@ -133,18 +107,18 @@ public class TextInput{
 	public String kMostProbableWords(String seedWord, int k) {
 		if (k == 0)
 			return "";
-		
-		Vertex<String> v = graph.getVertex(seedWord);
+		HashMap<String, Integer> innerKeys = table.get(seedWord);
 		String text = "";
 		
 		// If adjacency list is empty (no next word)
-		if (v.getAdj().size() == 0) {
+		if (innerKeys.size() == 0) {
 				return text;
 			}
 		
 		// Reverse sort adjacency list
-		ArrayList<Edge<String>> adjList = v.getAdj();
-		adjList.sort((o1, o2) -> o2.compare(o1, o2));
+		Set<Entry<String, Integer>> innerKeyList = innerKeys.entrySet();
+		innerKeys.get(o1)
+		innerKeyList.sort((o1, o2) -> );
 		Iterator<Edge<String>> iter = adjList.iterator();
 		
 		// Add k number of words
@@ -238,6 +212,13 @@ public class TextInput{
 			}
 		}
 		return text;
+	}
+
+
+	@Override
+	public int compare(String o1, String o2) {
+		
+		return 0;
 	}
 	
 }
