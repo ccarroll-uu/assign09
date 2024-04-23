@@ -4,33 +4,31 @@ import java.io.File;
 import java.text.DecimalFormat;
 
 public class TextGeneratorAnalysis extends TimerTemplate {
+	private TextInput input;
 	
 	private final static int TIMES_TO_LOOP = 1000;   
-	private final static int NSTART = 20000;
-	private final static int NINCREMENT = 20000;
+	private final static int NSTART = 1;
+	private final static int NINCREMENT = 200;
 	private final static int NSTEPS = 20;
 
 	public TextGeneratorAnalysis(int[] problemSizes, int timesToLoop) {
 		super(problemSizes, timesToLoop);
+		input = new TextInput(new File("src/comprehensive/CMC.txt"), 100000);
 	}
 	
 
 	@Override
 	protected void setup(int n) {
-		TextInput input = new TextInput(new File("src/comprehensive/CMC.txt"), n);
+		
 	}
 
 	@Override
 	protected void timingIteration(int n) {
-		for (int i = 0; i < n; i++) {
-			input.kMostProbableWords()
-		}
+		input.kMostProbableWords("the", n);
 	}
 
 	@Override
 	protected void compensationIteration(int n) {
-		for (int i = 0; i < n; i++) {
-		}
 	}
 
 	public static void main(String[] args) {
