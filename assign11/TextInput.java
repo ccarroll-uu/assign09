@@ -1,4 +1,3 @@
-
 package comprehensive;
 
 import java.io.File;
@@ -110,14 +109,14 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 		String text = "";
 		
 		// If inner key list is empty (no next word)
-		if (innerKeys.size() == 0) {
+		if (innerKeys == null) {
 				return text;
 			}
 		
 		// Reverse sort inner key list
 		Set<Entry<String, Integer>> innerKeySet = innerKeys.entrySet();
 		ArrayList<Entry<String, Integer>> innerKeyList = new ArrayList<Entry<String, Integer>>(innerKeySet);
-		innerKeyList.sort((Entry<String, Integer> o1, Entry<String, Integer> o2) -> compare(o2, o1));
+		innerKeyList.sort((Entry<String, Integer> o1, Entry<String, Integer> o2) -> compare(o1, o2));
 		
 		// Add k number of words
 		for (int i = 0; i < k; i++) {
@@ -150,7 +149,7 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 		for (int i = 1; i < k; i++) {
 			double number = rng.nextDouble(1);
 			// If inner key list is empty (no next word)
-			if (innerKeys.size() == 0) {
+			if (innerKeys == null) {
 				innerKeys = table.get(seedWord);
 				randomText += " " + seedWord;
 			}
@@ -158,7 +157,7 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 			else {
 				Set<Entry<String, Integer>> innerKeySet = innerKeys.entrySet();
 				ArrayList<Entry<String, Integer>> innerKeyList = new ArrayList<Entry<String, Integer>>(innerKeySet);
-				innerKeyList.sort((Entry<String, Integer> o1, Entry<String, Integer> o2) -> compare(o2, o1));
+				innerKeyList.sort((Entry<String, Integer> o1, Entry<String, Integer> o2) -> compare(o1, o2));
 
 				double weightSum = 0;
 				// Use random double to determine which word to generate
@@ -194,7 +193,7 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 		// Add k number of words
 		for (int i = 1; i < k; i++) {
 			// If inner key list is empty (no next word)
-			if (innerKeys.size() == 0) {
+			if (innerKeys == null) {
 				innerKeys = table.get(seedWord);
 				text += " " + seedWord;
 			}
@@ -202,7 +201,7 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 			else {
 				Set<Entry<String, Integer>> innerKeySet = innerKeys.entrySet();
 				ArrayList<Entry<String, Integer>> innerKeyList = new ArrayList<Entry<String, Integer>>(innerKeySet);
-				innerKeyList.sort((Entry<String, Integer> o1, Entry<String, Integer> o2) -> compare(o2, o1));
+				innerKeyList.sort((Entry<String, Integer> o1, Entry<String, Integer> o2) -> compare(o1, o2));
 				
 				text += " " + innerKeyList.get(0).getKey();
 				innerKeys = table.get(innerKeyList.get(0).getKey());
@@ -225,7 +224,7 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 		if (o1.getValue() == o2.getValue()) {
 			return o1.getKey().compareTo(o2.getKey());
 		}
-		return o1.getValue() - o2.getValue();
+		return o2.getValue() - o1.getValue();
 	}
 	
 }
