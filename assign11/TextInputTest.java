@@ -12,6 +12,7 @@ class TextInputTest {
 	private String str2;
 	private String str3;
 	private String str4;
+	private String str5;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -19,6 +20,7 @@ class TextInputTest {
 		str2 = "src/comprehensive/abc.txt";
 		str3 = "src/comprehensive/helloWorld.txt";
 		str4 = "src/comprehensive/trickyFormatting.txt";
+		str5 = "src/comprehensive/abc2.txt";
 	}
 
 	@Test
@@ -76,5 +78,19 @@ class TextInputTest {
 		assertEquals(input4.mostLikelyText("things", 3), "things yup things");
 		assertEquals(input4.mostLikelyText("this", 3), "this file iirc");
 		assertEquals(input4.mostLikelyText("few", 6), "few them punctuation or formatting things");
+	}
+	
+	@Test
+	void testStr5() {
+		TextInput input5 = new TextInput(new File(str5));
+		assertEquals(input5.mostLikelyText("a", 0), "");
+		assertEquals(input5.mostLikelyText("a", 2), "a b");
+		assertEquals(input5.mostLikelyText("b", 2), "b a");
+		assertEquals(input5.mostLikelyText("d", 3), "d a b");
+		assertEquals(input5.mostLikelyText("a", 4), "a b a b");
+		assertEquals(input5.mostLikelyText("b", 4), "b a b a");
+		assertEquals(input5.mostLikelyText("z", 4), "z z z z");
+		
+		System.out.println(input5.kMostProbableWords("a", 10));
 	}
 }
