@@ -5,19 +5,15 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Set;
 
 /**
  * This class takes in a text file and generates random text similar to the text in
  * the file.
  * 
  * @author Isabelle Cook and Courtney Carroll
- * @version April 20, 2024
+ * @version April 23, 2024
  */
 public class TextInput {
 	private HashMap<String, ArrayList<Node>> table;
@@ -56,6 +52,15 @@ public class TextInput {
 				return o1.data.compareTo(o2.data);
 			}
 			return o2.frequency - o1.frequency;
+		}
+		
+		public boolean equals(Object o) {
+			if (!(o instanceof Node)) {
+	            return false;
+	        }
+			
+			Node other = (Node) o;
+			return this.data.equals(other.data) && (this.frequency == other.frequency);
 		}
 	}
 	
@@ -96,25 +101,9 @@ public class TextInput {
 					prev = word;
 				}
 				else {
-					// Check if word and word after are contained in table
-					if (table.containsKey(prev)) {
-						ArrayList<Node> nodeList = table.get(prev);
-						
-						if (nodeList.contains(word)) {
-							int index = nodeList.indexOf(word);
-							nodeList.get(index).frequency += 1;
-						}
-						else {
-							nodeList.add(new Node(word, 1));
-						}
-					}
-					
-					// Add word and empty inner table to table
-					else {
-						ArrayList<Node> nodeList = new ArrayList<Node>();
-						nodeList.add(new Node(word, 1));
-						table.put(prev, nodeList);
-					}
+					ArrayList<Node> nodeList = new ArrayList<Node>();
+					nodeList.add(new Node(word, 1));
+					table.put(prev, nodeList);
 					
 					prev = word;
 				}
@@ -164,14 +153,7 @@ public class TextInput {
 		
 		return text;
 	}
-	
-	private int calcFrequency(ArrayList<Node> nodeList) {
-		int frequency = 0;
-		for(Node node: nodeList) {
-			frequency += node.frequency;
-		}
-		return frequency;
-	}
+
 	
 	/**
 	 * Generates random text based off the given seed word and word frequency.
@@ -199,13 +181,10 @@ public class TextInput {
 			}
 			// Reverse sort inner key list
 			else {
-				nodeList.sort((o1, o2) -> o1.compare(o1, o2));
-				int frequency = calcFrequency(nodeList);
-				
 				double weightSum = 0;
 				// Use random double to determine which word to generate
 				for (int j = 0; j < nodeList.size(); j++) {
-					weightSum += nodeList.get(j).frequency/ (double)frequency;
+					weightSum += nodeList.get(j).frequency/ (double)nodeList.size();
 					if (weightSum > number) {
 						randomText += " " + nodeList.get(j).data;
 						nodeList = table.get(nodeList.get(j).data);
