@@ -1,4 +1,3 @@
-
 package comprehensive;
 
 import java.io.File;
@@ -116,20 +115,17 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 			}
 		
 		// Reverse sort adjacency list
-		Set<Entry<String, Integer>> innerKeyList = innerKeys.entrySet();
-		innerKeys.get(o1)
-		innerKeyList.sort((o1, o2) -> );
-		Iterator<Edge<String>> iter = adjList.iterator();
+		Set<Entry<String, Integer>> innerKeySet = innerKeys.entrySet();
+		ArrayList<Entry<String, Integer>> innerKeyList = new ArrayList<Entry<String, Integer>>(innerKeySet);
+		innerKeyList.sort((Entry<String, Integer> o1, Entry<String, Integer> o2) -> compare(o2, o1));
 		
 		// Add k number of words
 		for (int i = 0; i < k; i++) {
-			if (i >= adjList.size())
+			if (i >= innerKeyList.size())
 				break;
-			Edge<String> edge = iter.next();
-			
 			if (i > 0)
 				text += " ";
-			text += edge.getDest().getItem();	
+			text += innerKeyList.get(i).getKey();	
 		}
 		
 		return text;
@@ -215,10 +211,20 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 	}
 
 
+	/**
+	 * Compares two map entries, first by value and second by key.
+	 * 
+	 * @param o1 - first map entry
+	 * @param o2 - second map entry
+	 * @return positive number if first entry > second entry; negative number if second  entry > first
+	 * entry; if first and second entry are equal, returns 0.
+	 */
 	@Override
-	public int compare(String o1, String o2) {
-		
-		return 0;
+	public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
+		if (o1.getValue() == o2.getValue()) {
+			return o1.getKey().compareTo(o2.getKey());
+		}
+		return o1.getValue() - o2.getValue();
 	}
 	
 }
