@@ -1,4 +1,4 @@
-package assign11;
+package comprehensive;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,26 +15,33 @@ class TextInputTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		str1 = "src/assign11/Baa, baa black sheep.txt";
-		str2 = "src/assign11/abc.txt";
-		str3 = "src/assign11/helloWorld.txt";
-		str4 = "src/assign11/trickyFormatting.txt";
+		str1 = "src/comprehensive/Baa, baa black sheep.txt";
+		str2 = "src/comprehensive/abc.txt";
+		str3 = "src/comprehensive/helloWorld.txt";
+		str4 = "src/comprehensive/trickyFormatting.txt";
 	}
 
 	@Test
 	void testStr3() {
 		TextInput input3 = new TextInput(new File(str3));
 		assertEquals(input3.randomText("hello", 0), "");
+		assertEquals(input3.randomText("hello", 1), "hello");
 		assertEquals(input3.randomText("hello", 2), "hello world");
 		assertEquals(input3.randomText("world", 2), "world world");
 		assertEquals(input3.randomText("hello", 4), "hello world hello world");
 		assertEquals(input3.randomText("world", 4), "world world world world");
 		
 		assertEquals(input3.mostLikelyText("hello", 0), "");
+		assertEquals(input3.mostLikelyText("hello", 1), "hello");
 		assertEquals(input3.mostLikelyText("hello", 2), "hello world");
 		assertEquals(input3.mostLikelyText("world", 2), "world world");
 		assertEquals(input3.mostLikelyText("hello", 4), "hello world hello world");
 		assertEquals(input3.mostLikelyText("world", 4), "world world world world");
+		
+		assertEquals(input3.kMostProbableWords("hello", 0), "");
+		assertEquals(input3.kMostProbableWords("hello", 1), "world");
+		assertEquals(input3.kMostProbableWords("hello", 3), "world");
+		assertEquals(input3.kMostProbableWords("world", 1), "");
 	}
 	
 	@Test
@@ -50,6 +57,8 @@ class TextInputTest {
 		
 		System.out.println(input2.randomText("d", 10));
 		System.out.println(input2.randomText("z", 8));
+		
+		assertEquals(input2.kMostProbableWords("a", 5), "b c d e f");
 	}
 	
 	@Test
