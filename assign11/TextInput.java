@@ -1,3 +1,4 @@
+
 package comprehensive;
 
 import java.io.File;
@@ -5,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -61,7 +61,7 @@ public class TextInput {
 	        }
 			
 			Node other = (Node) o;
-			return this.data.equals(other.data) && (this.frequency == other.frequency);
+			return this.data.equals(other.data);
 		}
 	}
 	
@@ -106,8 +106,8 @@ public class TextInput {
 					if (table.containsKey(prev)) {
 						ArrayList<Node> nodeList = table.get(prev);
 						
-						if (nodeList.contains(word)) {
-							int index = nodeList.indexOf(word);
+						if (nodeList.contains(new Node(word, 1))) {
+							int index = nodeList.indexOf(new Node(word, 1));
 							nodeList.get(index).frequency += 1;
 						}
 						else {
