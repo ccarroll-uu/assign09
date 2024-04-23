@@ -1,3 +1,4 @@
+
 package comprehensive;
 
 import java.io.File;
@@ -7,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
@@ -20,6 +22,27 @@ import java.util.Set;
  */
 public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 	private HashMap<String, HashMap<String, Integer>> table;
+	
+	/**
+	 * The private Node class creates nodes for word frequency.
+	 */
+	private class Node {
+		public String data;
+		public int frequency;
+		
+		/**
+		 * Creates a Node that stores data and frequency.
+		 * 
+		 * @param data - data in node
+		 * @param leftChild - left child node
+		 * @param rightChild - right child node
+		 * @param parent - parent node
+		 */
+		public Node(String data, int frequency) {
+			this.data = data;
+			this.frequency = frequency;
+		}
+	}
 	
 	/**
 	 * Constructor for the TextInput class.
