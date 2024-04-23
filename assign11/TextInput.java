@@ -1,3 +1,4 @@
+
 package comprehensive;
 
 import java.io.File;
@@ -62,8 +63,8 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 					if (table.containsKey(prev)) {
 						HashMap<String, Integer> innerTable = table.get(prev);
 						if (innerTable.containsKey(word)) {
-							int count = innerTable.get(word);
-							innerTable.put(word, count++);
+							int count = innerTable.get(word) + 1;
+							innerTable.put(word, count);
 							table.put(prev, innerTable);
 						}
 						else {
