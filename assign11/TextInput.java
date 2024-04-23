@@ -1,3 +1,4 @@
+
 package comprehensive;
 
 import java.io.File;
@@ -5,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -109,12 +109,12 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 		HashMap<String, Integer> innerKeys = table.get(seedWord);
 		String text = "";
 		
-		// If adjacency list is empty (no next word)
+		// If inner key list is empty (no next word)
 		if (innerKeys.size() == 0) {
 				return text;
 			}
 		
-		// Reverse sort adjacency list
+		// Reverse sort inner key list
 		Set<Entry<String, Integer>> innerKeySet = innerKeys.entrySet();
 		ArrayList<Entry<String, Integer>> innerKeyList = new ArrayList<Entry<String, Integer>>(innerKeySet);
 		innerKeyList.sort((Entry<String, Integer> o1, Entry<String, Integer> o2) -> compare(o2, o1));
@@ -143,32 +143,33 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 			return "";
 		Random rng = new Random();
 		
-		Vertex<String> v = graph.getVertex(seedWord);
+		HashMap<String, Integer> innerKeys = table.get(seedWord);
 		String randomText = seedWord;
 		
 		// Add k number of words
 		for (int i = 1; i < k; i++) {
 			double number = rng.nextDouble(1);
-			// If adjacency list is empty (no next word)
-			if (v.getAdj().size() == 0) {
-				v = graph.getVertex(seedWord);
+			// If inner key list is empty (no next word)
+			if (innerKeys.size() == 0) {
+				innerKeys = table.get(seedWord);
 				randomText += " " + seedWord;
 			}
-			// Reverse sort adjacency list
+			// Reverse sort inner key list
 			else {
-				ArrayList<Edge<String>> adjList = v.getAdj();
-				adjList.sort((o1, o2) -> o2.compare(o1, o2));
-				Iterator<Edge<String>> iter = adjList.iterator();
-				Edge<String> edge = iter.next();
-				double weightSum = edge.getWeight();
+				Set<Entry<String, Integer>> innerKeySet = innerKeys.entrySet();
+				ArrayList<Entry<String, Integer>> innerKeyList = new ArrayList<Entry<String, Integer>>(innerKeySet);
+				innerKeyList.sort((Entry<String, Integer> o1, Entry<String, Integer> o2) -> compare(o2, o1));
+
+				double weightSum = 0;
 				// Use random double to determine which word to generate
-				while (iter.hasNext() && weightSum < number) {
-					edge = iter.next();
-					weightSum += edge.getWeight();
+				for (int j = 0; j < innerKeyList.size(); j++) {
+					weightSum += innerKeyList.get(j).getValue()/ (double) innerKeys.size();
+					if (weightSum > number) {
+						randomText += " " + innerKeyList.get(j).getKey();
+						innerKeys = table.get(innerKeyList.get(j).getKey());
+						break;
+					}	
 				}
-				
-				randomText += " " + edge.getDest().getItem();
-				v = edge.getDest();
 			}	
 		}
 		
@@ -188,23 +189,23 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 	public String mostLikelyText(String seedWord, int k) {
 		if (k == 0)
 			return "";
-		Vertex<String> v = graph.getVertex(seedWord);
+		HashMap<String, Integer> innerKeys = table.get(seedWord);
 		String text = seedWord;
 		// Add k number of words
 		for (int i = 1; i < k; i++) {
-			// If adjacency list is empty (no next word)
-			if (v.getAdj().size() == 0) {
-				v = graph.getVertex(seedWord);
+			// If inner key list is empty (no next word)
+			if (innerKeys.size() == 0) {
+				innerKeys = table.get(seedWord);
 				text += " " + seedWord;
 			}
 			// Sort list and add next word with highest frequency
 			else {
-				ArrayList<Edge<String>> adjList = v.getAdj();
-				adjList.sort((o1, o2) -> o1.compare(o1, o2));
-				Edge<String> edge = adjList.get(0);
+				Set<Entry<String, Integer>> innerKeySet = innerKeys.entrySet();
+				ArrayList<Entry<String, Integer>> innerKeyList = new ArrayList<Entry<String, Integer>>(innerKeySet);
+				innerKeyList.sort((Entry<String, Integer> o1, Entry<String, Integer> o2) -> compare(o2, o1));
 				
-				text += " " + edge.getDest().getItem();
-				v = edge.getDest();
+				text += " " + innerKeyList.get(0).getKey();
+				innerKeys = table.get(innerKeyList.get(0).getKey());
 			}
 		}
 		return text;
