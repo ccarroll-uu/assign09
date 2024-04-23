@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -13,7 +14,7 @@ import java.util.Scanner;
  * the file.
  * 
  * @author Isabelle Cook and Courtney Carroll
- * @version April 23, 2024
+ * @version April 20, 2024
  */
 public class TextInput {
 	private HashMap<String, ArrayList<Node>> table;
@@ -101,9 +102,25 @@ public class TextInput {
 					prev = word;
 				}
 				else {
-					ArrayList<Node> nodeList = new ArrayList<Node>();
-					nodeList.add(new Node(word, 1));
-					table.put(prev, nodeList);
+					// Check if word and word after are contained in table
+					if (table.containsKey(prev)) {
+						ArrayList<Node> nodeList = table.get(prev);
+						
+						if (nodeList.contains(word)) {
+							int index = nodeList.indexOf(word);
+							nodeList.get(index).frequency += 1;
+						}
+						else {
+							nodeList.add(new Node(word, 1));
+						}
+					}
+					
+					// Add word and empty inner table to table
+					else {
+						ArrayList<Node> nodeList = new ArrayList<Node>();
+						nodeList.add(new Node(word, 1));
+						table.put(prev, nodeList);
+					}
 					
 					prev = word;
 				}
@@ -153,7 +170,14 @@ public class TextInput {
 		
 		return text;
 	}
-
+	
+	private int calcFrequency(ArrayList<Node> nodeList) {
+		int frequency = 0;
+		for(Node node: nodeList) {
+			frequency += node.frequency;
+		}
+		return frequency;
+	}
 	
 	/**
 	 * Generates random text based off the given seed word and word frequency.
@@ -181,10 +205,13 @@ public class TextInput {
 			}
 			// Reverse sort inner key list
 			else {
+				nodeList.sort((o1, o2) -> o1.compare(o1, o2));
+				int frequency = calcFrequency(nodeList);
+				
 				double weightSum = 0;
 				// Use random double to determine which word to generate
 				for (int j = 0; j < nodeList.size(); j++) {
-					weightSum += nodeList.get(j).frequency/ (double)nodeList.size();
+					weightSum += nodeList.get(j).frequency/ (double)frequency;
 					if (weightSum > number) {
 						randomText += " " + nodeList.get(j).data;
 						nodeList = table.get(nodeList.get(j).data);
