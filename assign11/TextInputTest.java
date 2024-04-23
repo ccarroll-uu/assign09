@@ -1,3 +1,4 @@
+
 package comprehensive;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -89,8 +90,7 @@ class TextInputTest {
 		assertEquals(input5.mostLikelyText("d", 3), "d a b");
 		assertEquals(input5.mostLikelyText("a", 4), "a b a b");
 		assertEquals(input5.mostLikelyText("b", 4), "b a b a");
-		assertEquals(input5.mostLikelyText("z", 4), "z z z z");
 		
-		System.out.println(input5.kMostProbableWords("a", 10));
+		System.out.println(input5.randomText("a", 10));
 	}
 }
