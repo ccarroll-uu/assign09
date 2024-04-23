@@ -3,11 +3,11 @@ package comprehensive;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * This class takes in a text file and generates random text similar to the text in
@@ -17,7 +17,7 @@ import java.util.Scanner;
  * @version April 20, 2024
  */
 public class TextInput{
-	private Hashtable<String, Hashtable<String, Integer>> table;
+	private HashMap<String, HashMap<String, Integer>> table;
 	private Graph<String> graph;
 	
 	/**
@@ -37,8 +37,8 @@ public class TextInput{
 	 * @param file - given file
 	 * @return hash table storing the frequency of words their connections
 	 */
-	private Hashtable<String, Hashtable<String, Integer>> readFromFile(File file){
-		Hashtable<String, Hashtable<String, Integer>> table = new Hashtable<String, Hashtable<String, Integer>>();
+	private HashMap<String, HashMap<String, Integer>> readFromFile(File file){
+		HashMap<String, HashMap<String, Integer>> table = new HashMap<String, HashMap<String, Integer>>();
 		String prev = null;
 		try {
 			Scanner input = new Scanner(file);
@@ -60,7 +60,7 @@ public class TextInput{
 				else {
 					// Check if word and word after are contained in table
 					if (table.containsKey(prev)) {
-						Hashtable<String, Integer> innerTable = table.get(prev);
+						HashMap<String, Integer> innerTable = table.get(prev);
 						if (innerTable.containsKey(word)) {
 							int count = innerTable.get(word);
 							innerTable.put(word, count++);
@@ -74,7 +74,7 @@ public class TextInput{
 					
 					// Add word and empty inner table to table
 					else {
-						Hashtable<String, Integer> innerTable = new Hashtable<String, Integer>();
+						HashMap<String, Integer> innerTable = new HashMap<String, Integer>();
 						innerTable.put(word, 1);
 						table.put(prev, innerTable);
 					}
@@ -94,21 +94,23 @@ public class TextInput{
 	}
 	
 	/**
-	 * Creates a graph from the given Hashtable.
+	 * Creates a graph from the given HashMap.
 	 * 
-	 * @param table - given Hashtable
+	 * @param table - given HashMap
 	 * @return a Graph with unique words from the input file.
 	 */
-	private Graph<String> makeGraph(Hashtable<String, Hashtable<String, Integer>> table) {
+	private Graph<String> makeGraph(HashMap<String, HashMap<String, Integer>> table) {
 		Graph<String> graph = new Graph<String>();
-		Enumeration<String> keys = table.keys();
+		Set<String> keys = table.keySet();
+		Iterator<String> iter = keys.iterator();
 		// Go through all of words in table
 		for (int i = 0; i < table.size(); i++) {
-			String key = keys.nextElement();
-			Enumeration<String> innerKeys = table.get(key).keys();
+			String key = iter.next();
+			Set<String> innerKeys = table.get(key).keySet();
+			Iterator<String> innerIter = innerKeys.iterator();
 			// Go through all of words in inner table
 			for(int j = 0; j < table.get(key).size(); j++) {
-				String innerKey = innerKeys.nextElement();
+				String innerKey = innerIter.next();
 				// Calculate edge weight
 				int count = table.get(key).get(innerKey);
 				double weight = count / (double) table.get(key).size();
