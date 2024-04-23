@@ -1,4 +1,3 @@
-
 package comprehensive;
 
 import java.io.File;
@@ -20,13 +19,13 @@ import java.util.Set;
  * @author Isabelle Cook and Courtney Carroll
  * @version April 20, 2024
  */
-public class TextInput implements Comparator<Map.Entry<String, Integer>>{
-	private HashMap<String, HashMap<String, Integer>> table;
+public class TextInput {
+	private HashMap<Node, ArrayList<Node>> table;
 	
 	/**
 	 * The private Node class creates nodes for word frequency.
 	 */
-	private class Node {
+	private class Node implements Comparator<Node>{
 		public String data;
 		public int frequency;
 		
@@ -41,6 +40,22 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 		public Node(String data, int frequency) {
 			this.data = data;
 			this.frequency = frequency;
+		}
+
+		/**
+		 * Compares two Nodes, first by frequency and then by data.
+		 * 
+		 * @param o1 - first Node
+		 * @param o2 - second Node
+		 * @return positive number if first Node > second Node; negative number if second Node > first
+		 * Node; if first and second Node are equal, returns 0.
+		 */
+		@Override
+		public int compare(Node o1, Node o2) {
+			if (o1.frequency == o2.frequency) {
+				return o1.data.compareTo(o2.data);
+			}
+			return o2.frequency - o1.frequency;
 		}
 	}
 	
@@ -60,9 +75,9 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 	 * @param file - given file
 	 * @return hash table storing the frequency of words their connections
 	 */
-	private HashMap<String, HashMap<String, Integer>> readFromFile(File file){
-		HashMap<String, HashMap<String, Integer>> table = new HashMap<String, HashMap<String, Integer>>();
-		String prev = null;
+	private HashMap<Node, ArrayList<Node>> readFromFile(File file){
+		HashMap<Node, ArrayList<Node>> table = new HashMap<Node, ArrayList<Node>>();
+		Node prev = null;
 		try {
 			Scanner input = new Scanner(file);
 	
@@ -78,28 +93,28 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 				word = word.toLowerCase();
 				
 				if (prev == null) {
-					prev = word;
+					prev = new Node(word, 1);
 				}
 				else {
 					// Check if word and word after are contained in table
 					if (table.containsKey(prev)) {
-						HashMap<String, Integer> innerTable = table.get(prev);
-						if (innerTable.containsKey(word)) {
-							int count = innerTable.get(word);
-							innerTable.put(word, count++);
-							table.put(prev, innerTable);
+						table.put();
+						ArrayList<Node> nodeList = table.get(prev);
+						
+						if (nodeList.contains(word)) {
+							int index = nodeList.indexOf(word);
+							nodeList.get(index).frequency += 1;
 						}
 						else {
-							innerTable.put(word, 1);
-							table.put(prev, innerTable);
+							nodeList.add(new Node(word, 1));
 						}
 					}
 					
 					// Add word and empty inner table to table
 					else {
-						HashMap<String, Integer> innerTable = new HashMap<String, Integer>();
-						innerTable.put(word, 1);
-						table.put(prev, innerTable);
+						ArrayList<Node> nodeList = new ArrayList<Node>();
+						nodeList.add(new Node(word, 1));
+						table.put(new Node(prev, 1), nodeList);
 					}
 					
 					prev = word;
@@ -233,21 +248,5 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 		return text;
 	}
 
-
-	/**
-	 * Compares two map entries, first by value and second by key.
-	 * 
-	 * @param o1 - first map entry
-	 * @param o2 - second map entry
-	 * @return positive number if first entry > second entry; negative number if second  entry > first
-	 * entry; if first and second entry are equal, returns 0.
-	 */
-	@Override
-	public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
-		if (o1.getValue() == o2.getValue()) {
-			return o1.getKey().compareTo(o2.getKey());
-		}
-		return o2.getValue() - o1.getValue();
-	}
 	
 }
