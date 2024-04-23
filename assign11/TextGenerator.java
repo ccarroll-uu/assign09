@@ -30,7 +30,7 @@ public class TextGenerator {
 		if (outputType == null) {
 			System.out.println(input.kMostProbableWords(seedWord, k));
 		}
-		else if (outputType == "all") {
+		else if (outputType.equals("all")) {
 			System.out.println(input.randomText(seedWord, k));
 		}
 		else {
