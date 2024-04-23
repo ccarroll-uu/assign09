@@ -1,4 +1,3 @@
-
 package comprehensive;
 
 import java.io.File;
@@ -31,6 +30,10 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 		table = readFromFile(file);
 	}
 	
+	
+	public TextInput(File file, int wordCount) {
+		table = readFromFile2(file, wordCount);
+	}
 	
 	/**
 	 * Private method that stores frequency of words and their connections from text file.
@@ -81,6 +84,71 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 					}
 					
 					prev = word;
+				}
+			}
+			
+			input.close();
+		}
+		
+		catch (FileNotFoundException e) {
+			System.err.println("File not found");
+		}
+		
+		return table;
+	}
+	
+	
+	/**
+	 * Private method that stores frequency of words and their connections from text file.
+	 * 
+	 * @param file - given file
+	 * @return hash map storing the frequency of words their connections
+	 */
+	private HashMap<String, HashMap<String, Integer>> readFromFile2(File file, int wordCount){
+		HashMap<String, HashMap<String, Integer>> table = new HashMap<String, HashMap<String, Integer>>();
+		String prev = null;
+		int counter = 0;
+		try {
+			Scanner input = new Scanner(file);
+	
+			// Go through words in text file
+			while (input.hasNext() && counter < wordCount) {
+				String word = input.next();
+				// Check if word starts with invalid character
+				while (input.hasNext() && Character.toString(word.charAt(0)).matches("[^\\w]"))
+					word = input.next();
+				// Remove invalid characters
+				String[] wordSplit = word.split("[^\\w]");
+				word = wordSplit[0];
+				word = word.toLowerCase();
+				
+				if (prev == null) {
+					prev = word;
+				}
+				else {
+					// Check if word and word after are contained in table
+					if (table.containsKey(prev)) {
+						HashMap<String, Integer> innerTable = table.get(prev);
+						if (innerTable.containsKey(word)) {
+							int count = innerTable.get(word) + 1;
+							innerTable.put(word, count);
+							table.put(prev, innerTable);
+						}
+						else {
+							innerTable.put(word, 1);
+							table.put(prev, innerTable);
+						}
+					}
+					
+					// Add word and empty inner table to table
+					else {
+						HashMap<String, Integer> innerTable = new HashMap<String, Integer>();
+						innerTable.put(word, 1);
+						table.put(prev, innerTable);
+					}
+					
+					prev = word;
+					counter++;
 				}
 			}
 			
@@ -159,11 +227,12 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 				Set<Entry<String, Integer>> innerKeySet = innerKeys.entrySet();
 				ArrayList<Entry<String, Integer>> innerKeyList = new ArrayList<Entry<String, Integer>>(innerKeySet);
 				innerKeyList.sort((Entry<String, Integer> o1, Entry<String, Integer> o2) -> compare(o1, o2));
+				int frequency = calcFrequency(innerKeyList);
 
 				double weightSum = 0;
 				// Use random double to determine which word to generate
 				for (int j = 0; j < innerKeyList.size(); j++) {
-					weightSum += innerKeyList.get(j).getValue()/ (double) innerKeys.size();
+					weightSum += innerKeyList.get(j).getValue()/ (double) frequency;
 					if (weightSum > number) {
 						randomText += " " + innerKeyList.get(j).getKey();
 						innerKeys = table.get(innerKeyList.get(j).getKey());
@@ -226,6 +295,20 @@ public class TextInput implements Comparator<Map.Entry<String, Integer>>{
 			return o1.getKey().compareTo(o2.getKey());
 		}
 		return o2.getValue() - o1.getValue();
+	}
+	
+	/**
+	 * Calculates the total frequency for a word.
+	 * 
+	 * @param innerKeyList - an ArrayList of Entries describing the frequency of a word
+	 * @return - total frequency
+	 */
+	private int calcFrequency(ArrayList<Entry<String, Integer>> innerKeyList) {
+		int frequency = 0;
+		for(Entry<String, Integer> entry : innerKeyList) {
+			frequency += entry.getValue();
+		}
+		return frequency;
 	}
 	
 }
